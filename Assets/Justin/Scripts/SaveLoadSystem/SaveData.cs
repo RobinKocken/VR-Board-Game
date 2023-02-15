@@ -7,9 +7,6 @@ using System.Data;
 public class SaveData
 {
     [Header("Setting Data")]
-    public int intTest;
-    [Space]
-    public float floatTest;
-    [Space]
-    public bool boolTest;
+    public float masterVolume;
+    public float playerHeight;
 }

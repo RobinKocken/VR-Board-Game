@@ -2,11 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public enum UILanguage
+    {
+        English,
+        Dutch
+    }
+
     public enum UIState
     {
         Disabled,
@@ -18,36 +25,34 @@ public class UIManager : MonoBehaviour
     public SaveData saveData;
 
     public UIState uiState;
+    [HideInInspector] public UIState previousUIState;
+    public UILanguage language;
+    [HideInInspector]public UILanguage previousUILanguage;
 
     [Header("Main Menu")]
-    public string mainMenuName;
-    public string mMenuMarkup;
-    [Space]
     public GameObject mainMenu = null;
-    [Space]
-    public TMP_Text menuText;
 
     [Header("Pause Menu")]
-    public string pauseMenuName;
-    public string pMenuMarkup;
-    [Space]
     public GameObject pauseUI = null;
-    [Space]
-    public TMP_Text pMenuText;
 
     [Header("Settings Menu")]
-    public string settingsMenuName;
-    public string sMenuMarkup;
-    [Space]
     public GameObject settingsMenu = null;
     [Space]
-    public TMP_Text sMenuText;
+    public Transform cam;
+    [Space]
+    public AudioMixer mainMixer;
+    [Space]
+    public Slider masterVol;
+    public Slider playerHeight;
 
     public void Awake()
     {
-        SaveManager.Load();
-
         Initialize();
+    }
+
+    public void Start()
+    {
+        Invoke("LoadSettings", 1.0f);
     }
 
     private void Update()
@@ -68,11 +73,6 @@ public class UIManager : MonoBehaviour
             case UIState.MainMenu:
                 mainMenu.SetActive(true);
 
-                if(menuText.text != mainMenuName)
-                {
-                    menuText.text = GetName(menuText, mainMenuName, mMenuMarkup);
-                }
-
                 pauseUI.SetActive(false);
                 settingsMenu.SetActive(false);
                 break;
@@ -80,22 +80,12 @@ public class UIManager : MonoBehaviour
             case UIState.PauseMenu:
                 pauseUI.SetActive(true);
 
-                if (pMenuText.text != pauseMenuName)
-                {
-                    pMenuText.text = GetName(pMenuText, pauseMenuName, pMenuMarkup);
-                }
-
                 mainMenu.SetActive(false);
                 settingsMenu.SetActive(false);
                 break;
 
             case UIState.Settings:
                 settingsMenu.SetActive(true);
-
-                if (sMenuText.text != settingsMenuName)
-                {
-                    sMenuText.text = GetName(sMenuText, settingsMenuName, sMenuMarkup);
-                }
 
                 mainMenu.SetActive(false);
                 pauseUI.SetActive(false);
@@ -105,19 +95,38 @@ public class UIManager : MonoBehaviour
 
     public void StartSimulation(string lvlToLoad)
     {
-        SceneManager.LoadScene(lvlToLoad);
+        SaveManager.Save(saveData);
+
+        if (lvlToLoad != "")
+        {
+            SceneManager.LoadScene(lvlToLoad);
+        }
+        else
+        {
+            Debug.LogError("Error, No Scene specified!, Please specify a scene to load and try again");
+        }
     }
 
     public void OpenSettings()
     {
+        previousUIState = uiState;
+
         uiState = UIState.Settings;
+
+        LoadSettings();
     }
 
     public void BackToMain(string sceneToLoad)
     {
         SaveManager.Save(saveData);
 
-        SceneManager.LoadScene(sceneToLoad);
+        if(sceneToLoad != "")
+        {
+            SceneManager.LoadScene(sceneToLoad);
+        }else
+        {
+            Debug.LogError("Error, No Scene specified!, Please specify a scene to load and try again");
+        }
     }
 
     public void QuitSimulation()
@@ -125,6 +134,48 @@ public class UIManager : MonoBehaviour
         SaveManager.Save(saveData);
 
         Application.Quit();
+    }
+
+    public void SetVolume(float volume)
+    {
+        mainMixer.SetFloat("Volume", Mathf.Log10(volume) * 20);
+
+        Debug.Log(volume);
+    }
+
+    public void SetHeight(float height)
+    {
+        cam.localPosition = new Vector3(cam.localPosition.x, height, cam.localPosition.z);
+
+        Debug.Log(height);
+    }
+
+    public void Back()
+    {
+        SaveSettings();
+
+        uiState = previousUIState;
+    }
+
+    public void Continue()
+    {
+        uiState = UIState.Disabled;
+    }
+
+    public void SaveSettings()
+    {
+        saveData.masterVolume = masterVol.value;
+        saveData.playerHeight = playerHeight.value;
+
+        SaveManager.Save(saveData);
+    }
+
+    public void LoadSettings()
+    {
+        SaveManager.Load();
+
+        masterVol.value = saveData.masterVolume;
+        playerHeight.value = saveData.playerHeight;
     }
 
     public void Initialize()
@@ -139,7 +190,6 @@ public class UIManager : MonoBehaviour
 
             case UIState.MainMenu:
                 mainMenu.SetActive(true);
-                menuText.text = GetName(menuText, mainMenuName, mMenuMarkup);
 
                 settingsMenu.SetActive(false);
                 pauseUI.SetActive(false);
@@ -151,10 +201,5 @@ public class UIManager : MonoBehaviour
                 mainMenu.SetActive(false);
                 break;
         }
-    }
-
-    public string GetName(TMP_Text inputText, string title, string markupType)
-    {
-        return inputText.text.Replace(markupType, title);
     }
 }
