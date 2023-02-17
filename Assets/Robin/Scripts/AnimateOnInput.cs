@@ -10,11 +10,6 @@ public class AnimateOnInput : MonoBehaviour
     public InputActionProperty pinchAnimation;
     public InputActionProperty gripAnimation;    
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         float triggerValue = pinchAnimation.action.ReadValue<float>();
