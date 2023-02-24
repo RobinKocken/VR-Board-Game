@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -44,6 +45,14 @@ public class UIManager : MonoBehaviour
     [Space]
     public Slider masterVol;
     public Slider playerHeight;
+
+    [Header("Misc")]
+    public CinemachineVirtualCamera cmCam;
+    public CinemachineVirtualCamera playerCam;
+
+    public Button[] buttons;
+
+    public GameObject flicker;
 
     public void Awake()
     {
@@ -93,23 +102,21 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void StartSimulation(string lvlToLoad)
+    public void StartSimulation()
     {
         SaveManager.Save(saveData);
 
-        if (lvlToLoad != "")
-        {
-            SceneManager.LoadScene(lvlToLoad);
-        }
-        else
-        {
-            Debug.LogError("Error, No Scene specified!, Please specify a scene to load and try again");
-        }
+        CameraSwitcher.Register(cmCam);
+        CameraSwitcher.Register(playerCam);
+
+        CameraSwitcher.SwitchCamera(playerCam);
     }
 
     public void OpenSettings()
     {
         previousUIState = uiState;
+
+        flicker.SetActive(true);
 
         uiState = UIState.Settings;
 
@@ -154,11 +161,15 @@ public class UIManager : MonoBehaviour
     {
         SaveSettings();
 
+        flicker.SetActive(true);
+
         uiState = previousUIState;
     }
 
     public void Continue()
     {
+        flicker.SetActive(true);
+
         uiState = UIState.Disabled;
     }
 
@@ -176,6 +187,15 @@ public class UIManager : MonoBehaviour
 
         masterVol.value = saveData.masterVolume;
         playerHeight.value = saveData.playerHeight;
+    }
+
+    public void Unhover()
+    {
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].GetComponent<RectTransform>().localScale = Vector3.one;
+            buttons[i].GetComponent<Animator>().SetTrigger("T");
+        }
     }
 
     public void Initialize()
