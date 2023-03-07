@@ -6,14 +6,31 @@ public class GameManager : MonoBehaviour
 {
     public enum PalletColour
     {
-        red,
+        yellow,
         blue,
+        red,
         green,
+        white,
+        lightGreen,
+        darkGrey,
+        lightGrey,
+        black,
+        door,
+        sealer,
+        empty,
     }
     public PalletColour colour;
 
     public GameObject selected;
-    public GameObject[] pallets;
+
+    public Product[] product;
+
+    public float costPerMeter;
+    public float pickUpCost;   
+
+    GameObject[] placed;
+
+    public bool door, sealer;
 
     void Start()
     {
@@ -25,25 +42,57 @@ public class GameManager : MonoBehaviour
         
     }
 
-    void SelectPallet()
+    void CheckDistance()
     {
-        switch(colour)
+        
+
+
+    }
+
+    public void CheckIfCalculate()
+    {
+        if(PalletColour.door == colour)
         {
-            case PalletColour.red:
-                selected = pallets[0];
-                break;
-            case PalletColour.blue:
-                selected = pallets[1];
-                break;
-            case PalletColour.green:
-                selected = pallets[2];
-                break;
+            door = true;
         }
+
+        if(PalletColour.sealer == colour)
+        {
+            sealer = true;
+        }
+
+        if(door && sealer)
+        {
+            CheckDistance();
+        }
+    }
+
+    void SelectPallet(GameObject pallet)
+    {
+        //selected = product[(int)colour].pallet;
+        selected = pallet;
     }
 
     public void SelectColour(PalletColour pallet)
     {
         colour = pallet;
-        SelectPallet();
+
+        for(int i = 0; i < product.Length; i++)
+        {
+            if(product[i].colour == pallet)
+            {
+                SelectPallet(product[i].pallet);
+                return;
+            }
+        }        
     }
+}
+
+[System.Serializable]
+public class Product
+{
+    public GameManager.PalletColour colour;
+    public GameObject pallet;
+    public int amount;
+    public int demand;
 }

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ColourSelect : MonoBehaviour
 {
-    public GameManager gamaManager;
+    public GameManager gameManager;
     public GameManager.PalletColour pallet;
 
     public void Select()
     {
-        gamaManager.SelectColour(pallet);
+        gameManager.SelectColour(pallet);
     }
 }
