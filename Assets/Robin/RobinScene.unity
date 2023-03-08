@@ -622,6 +622,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 234038735}
   pallet: 0
+  speed: 0
+  height: 0
+  intervals: 0
 --- !u!1 &692898279
 GameObject:
   m_ObjectHideFlags: 0
@@ -771,6 +774,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 234038735}
   pallet: 4
+  speed: 0
+  height: 0
+  intervals: 0
 --- !u!1 &766568878
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,6 +926,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 234038735}
   pallet: 1
+  speed: 0
+  height: 0
+  intervals: 0
 --- !u!1 &772017151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1187,6 +1196,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 234038735}
   pallet: 2
+  speed: 0
+  height: 0
+  intervals: 0
 --- !u!1 &1127337647
 GameObject:
   m_ObjectHideFlags: 0
@@ -1517,6 +1529,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 234038735}
   pallet: 3
+  speed: 0
+  height: 0
+  intervals: 0
 --- !u!1 &1622744577
 GameObject:
   m_ObjectHideFlags: 0
