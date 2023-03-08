@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Grid : MonoBehaviour
 {
@@ -12,10 +13,15 @@ public class Grid : MonoBehaviour
     public int yCount;
     public float posDif;
 
+    public TMP_Text tRevenue;
+    public TMP_Text tTotalCost;
+    public TMP_Text tgrossProfit;
+    public TMP_Text tgrossMargin;
 
     void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        gameManager.InitializeTmp(tRevenue, tTotalCost, tgrossProfit, tgrossMargin);
         CreateGrid();
     }
 
