@@ -23,42 +23,52 @@ public class GameManager : MonoBehaviour
 
     public GameObject selected;
 
+    public float totalCost;
+    public float costPerMeter;
+    public float pickUpCost;
+    public float maxCost;
+    public float profit;       
+
     public Product[] product;
 
-    public float costPerMeter;
-    public float pickUpCost;   
-
-    GameObject[] placed;
-
-    public bool door, sealer;
+    List<Transform> placed;
+    Transform door;
+    Transform sealer;
+    public bool bDoor, bSealer;
 
     void Start()
     {
         
     }
 
-    void Update()
-    {
-        
-    }
-
     void CheckDistance()
     {
-        
+        totalCost = 0;
 
+        for(int i = 0; i < placed.Count; i++)
+        {
+            float distanceSealer = Vector3.Distance(placed[i].position, sealer.position);
+            float distanceDoor = Vector3.Distance(placed[i].position, door.position);
 
+            totalCost += (int)Mathf.Round(distanceSealer) * costPerMeter + (int)Mathf.Round(distanceDoor) * costPerMeter + pickUpCost;
+        }
     }
 
-    public void CheckIfCalculate()
+    public void CheckIfCalculate(GameObject pallet)
     {
         if(PalletColour.door == colour)
         {
-            door = true;
+            bDoor = true;
+            door = pallet.transform;
         }
-
-        if(PalletColour.sealer == colour)
+        else if(PalletColour.sealer == colour)
         {
-            sealer = true;
+            bSealer = true;
+            sealer = pallet.transform;
+        }
+        else
+        {
+            placed.Add(pallet.transform);
         }
 
         if(door && sealer)

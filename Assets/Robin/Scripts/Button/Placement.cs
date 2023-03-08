@@ -13,11 +13,11 @@ public class Placement : MonoBehaviour
         {
             if(gameManager.product[(int)gameManager.colour].amount > 0)
             {
-                Instantiate(gameManager.selected, transform.position, transform.rotation);
+                GameObject pallet = Instantiate(gameManager.selected, transform.position, transform.rotation);
                 gameManager.product[(int)gameManager.colour].amount -= 1;
                 placeable = false;
 
-                gameManager.CheckIfCalculate();
+                gameManager.CheckIfCalculate(pallet);
             }
         }
     }
