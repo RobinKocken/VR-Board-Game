@@ -131,12 +131,24 @@ public class GameManager : MonoBehaviour
         tGrossMargin.text = $"Gross Margine {margin}%";
     }
 
-    public void InitializeTmp(TMP_Text rev, TMP_Text cost, TMP_Text profit, TMP_Text margin)
+    public void InitializeTmp(TMP_Text rev, TMP_Text cost, TMP_Text profit, TMP_Text margin, TMP_Text[] amount)
     {
         tRevenue = rev;
         tTotalCost = cost;
         tGrossProfit = profit;
         tGrossMargin = margin;
+
+        for(int i = 0; i < amount.Length; i++)
+        {
+            product[i].amountText = amount[i];
+            product[i].amountText.text = $"x {product[i].amount}";
+        }
+    }
+
+    public void CurrentAmount()
+    {
+        product[(int)colour].amount =- 1;
+        product[(int)colour].amountText.text = $"x {product[(int)colour].amount}";
     }
 }
 
@@ -147,4 +159,5 @@ public class Product
     public GameObject pallet;
     public int amount;
     public int demand;
+    public TMP_Text amountText;
 }

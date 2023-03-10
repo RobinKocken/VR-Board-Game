@@ -18,10 +18,16 @@ public class Grid : MonoBehaviour
     public TMP_Text tgrossProfit;
     public TMP_Text tgrossMargin;
 
-    void Start()
+    public TMP_Text[] amount;
+
+    void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        gameManager.InitializeTmp(tRevenue, tTotalCost, tgrossProfit, tgrossMargin);
+    }
+
+    void Start()    
+    {
+        gameManager.InitializeTmp(tRevenue, tTotalCost, tgrossProfit, tgrossMargin, amount);
         CreateGrid();
     }
 

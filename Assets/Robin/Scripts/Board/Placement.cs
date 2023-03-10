@@ -14,7 +14,7 @@ public class Placement : MonoBehaviour
             if(gameManager.product[(int)gameManager.colour].amount > 0)
             {
                 GameObject pallet = Instantiate(gameManager.selected, transform.position, transform.rotation);
-                gameManager.product[(int)gameManager.colour].amount -= 1;
+                gameManager.CurrentAmount();
                 placeable = false;
 
                 gameManager.CheckIfCalculate(pallet);

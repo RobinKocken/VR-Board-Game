@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ColourSelect : MonoBehaviour
@@ -13,7 +12,7 @@ public class ColourSelect : MonoBehaviour
     float startFloat;
     public float intervals;
 
-    bool buttonActivate;
+    public bool buttonActivate;
     float time;
     Vector3 pos;
 
