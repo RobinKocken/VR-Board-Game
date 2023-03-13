@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class Grid : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class Grid : MonoBehaviour
     public int xCount;
     public int yCount;
     public float posDif;
+
+    public List<GameObject> grid;
 
     public TMP_Text tRevenue;
     public TMP_Text tTotalCost;
@@ -29,6 +32,7 @@ public class Grid : MonoBehaviour
     {
         gameManager.InitializeTmp(tRevenue, tTotalCost, tgrossProfit, tgrossMargin, amount);
         CreateGrid();
+        gameManager.InitializeGrid(grid);
     }
 
     void CreateGrid()
@@ -41,6 +45,7 @@ public class Grid : MonoBehaviour
                 current.transform.localPosition = new Vector3(current.transform.localPosition.x + posDif * x, current.transform.localPosition.y + posDif * y, transform.localPosition.z);
 
                 current.GetComponent<Placement>().gameManager = gameManager;
+                grid.Add(current);
             }
         }
     }

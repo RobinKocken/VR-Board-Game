@@ -16,6 +16,11 @@ public class ColourSelect : MonoBehaviour
     float time;
     Vector3 pos;
 
+    void Awake()
+    {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+    }
+
     void Start()
     {
         pos = transform.position;

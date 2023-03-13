@@ -31,9 +31,12 @@ public class GameManager : MonoBehaviour
     public float totalCost;
     public float grossProfit;
 
+    float count;
+
     public Product[] product;
 
-    List<GameObject> placed;
+    public List<GameObject> placed;
+    public List<GameObject> grid;
     GameObject door;
     GameObject sealer;
     public bool bDoor, bSealer;
@@ -45,19 +48,35 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        SetCurrentAmount();
         TmpVisualize(revenue, totalCost, grossProfit, grossMargin);
     }
 
     void CheckDistance()
     {
         totalCost = 0;
+        count = 0;
+
+        for(int i = 0; i < product.Length; i++)
+        {
+            if(product[i].currentAmount < product[i].amount)
+            {
+                totalCost += product[i].demand * pickUpCost;
+            }
+        }
 
         for(int i = 0; i < placed.Count; i++)
         {
-            float distanceSealer = Vector3.Distance(placed[i].transform.position, sealer.transform.position);
-            float distanceDoor = Vector3.Distance(sealer.transform.position, door.transform.position);
+            float distanceSealer = Vector3.Distance(placed[i].transform.position, sealer.transform.position) * 10;
+            float distanceDoor = Vector3.Distance(sealer.transform.position, door.transform.position) * 10;
 
-            totalCost += (int)Mathf.Round(distanceSealer) * costPerMeter + (int)Mathf.Round(distanceDoor) * costPerMeter + pickUpCost;
+            Debug.Log($"S: {(int)Mathf.Round(distanceSealer)} D: {(int)Mathf.Round(distanceDoor)}");
+
+            totalCost += ((int)Mathf.Round(distanceSealer) * costPerMeter) + (int)Mathf.Round(distanceDoor) * costPerMeter;
+
+            float f = product[(int)placed[i].GetComponent<Pallet>().pallet].demand / (product[(int)placed[i].GetComponent<Pallet>().pallet].amount - product[(int)placed[i].GetComponent<Pallet>().pallet].currentAmount);
+
+            totalCost += ((int)Mathf.Round(distanceSealer) * costPerMeter) * f + ((int)Mathf.Round(distanceDoor) * costPerMeter) * f;
 
             grossProfit = revenue - totalCost;
             grossMargin = (grossProfit / revenue) * 100;
@@ -68,32 +87,21 @@ public class GameManager : MonoBehaviour
 
     public void CheckIfCalculate(GameObject pallet)
     {
-        if(PalletColour.door == colour)
+        if(colour == PalletColour.door)
         {
+            Debug.Log("Door");
             bDoor = true;
             door = pallet;
         }
-        else if(PalletColour.sealer == colour)
+        else if(colour == PalletColour.sealer)
         {
+            Debug.Log("Sealer");
             bSealer = true;
             sealer = pallet;
         }
-        else if(PalletColour.empty == colour)
-        {
-            for(int i = 0; i < placed.Count; i++)
-            {
-                Destroy(placed[i]);
-                placed.RemoveAt(i);
-            }
-
-            Destroy(sealer);
-            Destroy(door);
-
-            bSealer = false;
-            bDoor = false;
-        }
         else
         {
+            Debug.Log("Placed");
             placed.Add(pallet);
         }
 
@@ -113,14 +121,21 @@ public class GameManager : MonoBehaviour
     {
         colour = pallet;
 
-        for(int i = 0; i < product.Length; i++)
+        if(colour == PalletColour.empty)
         {
-            if(product[i].colour == pallet)
+            Empty();
+        }
+        else
+        {
+            for(int i = 0; i < product.Length; i++)
             {
-                SelectPallet(product[i].pallet);
-                return;
+                if(product[i].colour == pallet)
+                {
+                    SelectPallet(product[i].pallet);
+                    return;
+                }
             }
-        }        
+        }      
     }
 
     void TmpVisualize(float rev, float cost, float profit, float margin)
@@ -147,8 +162,55 @@ public class GameManager : MonoBehaviour
 
     public void CurrentAmount()
     {
-        product[(int)colour].amount =- 1;
-        product[(int)colour].amountText.text = $"x {product[(int)colour].amount}";
+        product[(int)colour].currentAmount -= 1;
+        product[(int)colour].amountText.text = $"x {product[(int)colour].currentAmount}";
+    }
+
+    void SetCurrentAmount()
+    {
+        for(int i = 0; i < product.Length; i++)
+        {
+            product[i].currentAmount = product[i].amount;
+        }
+    }
+
+    public void InitializeGrid(List<GameObject> l)
+    {
+        grid = l;
+    }
+
+    void Empty()
+    {
+        Debug.Log("Empty;");
+        for(int i = 0; i < placed.Count; i++)
+        {
+            Destroy(placed[i]);
+        }
+
+        placed.Clear();
+
+        Destroy(sealer);
+        Destroy(door);
+
+        bSealer = false;
+        bDoor = false;
+
+        grossMargin = 0;
+        grossProfit = 0;
+        totalCost = 0;
+
+        for(int i = 0; i < product.Length - 1; i++)
+        {
+            product[i].currentAmount = product[i].amount;
+            product[i].amountText.text = $"x {product[i].currentAmount}";
+        }
+
+        for(int i = 0; i < grid.Count; i++)
+        {
+            grid[i].GetComponent<Placement>().placeable = false;
+        }
+
+        SetCurrentAmount();
     }
 }
 
@@ -158,6 +220,7 @@ public class Product
     public GameManager.PalletColour colour;
     public GameObject pallet;
     public int amount;
+    public int currentAmount;
     public int demand;
     public TMP_Text amountText;
 }
