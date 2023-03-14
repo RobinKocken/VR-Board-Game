@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colour: 0
+  layer: 0
   selected: {fileID: 0}
   costPerMeter: 0.5
   pickUpCost: 2.5
@@ -57,58 +58,109 @@ MonoBehaviour:
     pallet: {fileID: 4302919154451997295, guid: 9f3eebb4cfe672f4ba6f586f14813540,
       type: 3}
     amount: 30
+    currentAmount: 0
     demand: 900
+    amountText: {fileID: 0}
   - colour: 1
     pallet: {fileID: 3526595983771799592, guid: 9cce7396ea2b8934e99a7a60d49bd0dc,
       type: 3}
     amount: 18
+    currentAmount: 0
     demand: 360
+    amountText: {fileID: 0}
   - colour: 2
     pallet: {fileID: 3827024334480409342, guid: b8a49f2133f4ff24891bbb33c8a9e7c4,
       type: 3}
     amount: 14
+    currentAmount: 0
     demand: 140
+    amountText: {fileID: 0}
   - colour: 3
     pallet: {fileID: 1516175285058661093, guid: 7f3afc8fe4e2fb440839cb639d3be959,
       type: 3}
     amount: 6
+    currentAmount: 0
     demand: 42
+    amountText: {fileID: 0}
   - colour: 4
     pallet: {fileID: 3551945733476656726, guid: 73e91ca47c20ac549ab29774fdb2ab7f,
       type: 3}
     amount: 6
+    currentAmount: 0
     demand: 36
+    amountText: {fileID: 0}
   - colour: 5
     pallet: {fileID: 369510412925358281, guid: 58d1cda08f95f5a469e200e2d2bdbf94, type: 3}
     amount: 2
+    currentAmount: 0
     demand: 10
+    amountText: {fileID: 0}
   - colour: 6
     pallet: {fileID: 3169681674726405277, guid: 9d3998fd75c4f0d4c90655d312f606c6,
       type: 3}
     amount: 2
+    currentAmount: 0
     demand: 8
+    amountText: {fileID: 0}
   - colour: 7
     pallet: {fileID: 6533432665547502415, guid: 643ca5be688beb14fbee85c44b1a1c3f,
       type: 3}
     amount: 1
+    currentAmount: 0
     demand: 4
+    amountText: {fileID: 0}
   - colour: 8
     pallet: {fileID: 794720064109899528, guid: fffc4ec3b77501d4b8e51a2b167a83f7, type: 3}
     amount: 1
+    currentAmount: 0
     demand: 3
+    amountText: {fileID: 0}
   - colour: 9
     pallet: {fileID: 3827024334480409342, guid: 7c9e486da5088e94aafd933b24fd116b,
       type: 3}
     amount: 1
+    currentAmount: 0
     demand: 0
+    amountText: {fileID: 0}
   - colour: 10
     pallet: {fileID: 3827024334480409342, guid: ec5fbaf736122b2438fdfdf7c2142ef9,
       type: 3}
     amount: 1
+    currentAmount: 0
     demand: 0
+    amountText: {fileID: 0}
   - colour: 11
     pallet: {fileID: 0}
     amount: 0
+    currentAmount: 0
     demand: 0
+    amountText: {fileID: 0}
+  placed: []
+  grid: []
   bDoor: 0
   bSealer: 0
+  tRevenue: {fileID: 0}
+  tTotalCost: {fileID: 0}
+  tGrossProfit: {fileID: 0}
+  tGrossMargin: {fileID: 0}
+  layers:
+  - layer: 0
+    gridBool: 
+    placed: []
+    product: []
+  - layer: 1
+    gridBool: 
+    placed: []
+    product: []
+  - layer: 2
+    gridBool: 
+    placed: []
+    product: []
+  - layer: 3
+    gridBool: 
+    placed: []
+    product: []
+  - layer: 4
+    gridBool: 
+    placed: []
+    product: []

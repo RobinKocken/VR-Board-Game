@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,7 +22,18 @@ public class GameManager : MonoBehaviour
         empty,
     }
 
+    public enum LayerNumber
+    {
+        layer1,
+        layer2,
+        layer3,
+        layer4,
+        layer5,
+    }
+
     public PalletColour colour;
+    public LayerNumber layer;
+
     public GameObject selected;
 
     public float costPerMeter;
@@ -31,35 +43,43 @@ public class GameManager : MonoBehaviour
     public float totalCost;
     public float grossProfit;
 
-    float count;
-
     public Product[] product;
 
     public List<GameObject> placed;
     public List<GameObject> grid;
-    GameObject door;
-    GameObject sealer;
-    public bool bDoor, bSealer;
 
     public TMP_Text tRevenue;
     public TMP_Text tTotalCost;
     public TMP_Text tGrossProfit;
     public TMP_Text tGrossMargin;
 
+    public Layers[] layers;
+
+    void Awake()
+    {
+        InitializeLayers();
+    }
+
     void Start()
     {
-        SetCurrentAmount();
         TmpVisualize(revenue, totalCost, grossProfit, grossMargin);
+        CurrentAmount();
     }
 
     void CheckDistance()
     {
         totalCost = 0;
-        count = 0;
 
         for(int i = 0; i < product.Length; i++)
         {
-            if(product[i].currentAmount < product[i].amount)
+            //Without Layer
+            //if(product[i].currentAmount < product[i].amount)
+            //{
+            //    totalCost += product[i].demand * pickUpCost;
+            //}
+
+            //With Layer
+            if(layers[(int)layer].currentAmount[i] < product[i].amount)
             {
                 totalCost += product[i].demand * pickUpCost;
             }
@@ -67,14 +87,21 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0; i < placed.Count; i++)
         {
-            float distanceSealer = Vector3.Distance(placed[i].transform.position, sealer.transform.position) * 10;
-            float distanceDoor = Vector3.Distance(sealer.transform.position, door.transform.position) * 10;
+            //Withouy Layer
+            //float distanceSealer = Vector3.Distance(placed[i].transform.position, sealer.transform.position) * 10;
+            //float distanceDoor = Vector3.Distance(sealer.transform.position, door.transform.position) * 10;            
+            
+            //With Layer
+            float distanceSealer = Vector3.Distance(layers[(int)layer].placed[i].transform.position, layers[(int)layer].sealer.transform.position) * 10;
+            float distanceDoor = Vector3.Distance(layers[(int)layer].sealer.transform.position, layers[(int)layer].door.transform.position) * 10;
 
             Debug.Log($"S: {(int)Mathf.Round(distanceSealer)} D: {(int)Mathf.Round(distanceDoor)}");
 
-            totalCost += ((int)Mathf.Round(distanceSealer) * costPerMeter) + (int)Mathf.Round(distanceDoor) * costPerMeter;
+            //Without Layer
+            //float f = product[(int)placed[i].GetComponent<Pallet>().pallet].demand / (product[(int)placed[i].GetComponent<Pallet>().pallet].amount - product[(int)placed[i].GetComponent<Pallet>().pallet].currentAmount);
 
-            float f = product[(int)placed[i].GetComponent<Pallet>().pallet].demand / (product[(int)placed[i].GetComponent<Pallet>().pallet].amount - product[(int)placed[i].GetComponent<Pallet>().pallet].currentAmount);
+            //With Layer 
+            float f = product[(int)layers[(int)layer].placed[i].GetComponent<Pallet>().pallet].demand / (layers[(int)layer].currentAmount[(int)placed[i].GetComponent<Pallet>().pallet] - layers[(int)layer].currentAmount[(int)placed[i].GetComponent<Pallet>().pallet]);
 
             totalCost += ((int)Mathf.Round(distanceSealer) * costPerMeter) * f + ((int)Mathf.Round(distanceDoor) * costPerMeter) * f;
 
@@ -90,22 +117,38 @@ public class GameManager : MonoBehaviour
         if(colour == PalletColour.door)
         {
             Debug.Log("Door");
-            bDoor = true;
-            door = pallet;
+
+            //Withouy Layer
+            //bDoor = true;
+            //door = pallet;
+
+            //With Layer
+            layers[(int)layer].bDoor = true;
+            layers[(int)layer].door = pallet;
         }
         else if(colour == PalletColour.sealer)
         {
             Debug.Log("Sealer");
-            bSealer = true;
-            sealer = pallet;
+            //Without Layer
+            //bSealer = true;
+            //sealer = pallet;
+
+            //With Layer
+            layers[(int)layer].bSealer = true;
+            layers[(int)layer].sealer = pallet;
         }
         else
         {
             Debug.Log("Placed");
-            placed.Add(pallet);
+
+            //Without Layer
+            //placed.Add(pallet);
+
+            //With Layer
+            layers[(int)layer].placed.Add(pallet);
         }
 
-        if(door && sealer)
+        if(layers[(int)layer].door && layers[(int)layer].sealer)
         {
             CheckDistance();
         }
@@ -155,45 +198,102 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0; i < amount.Length; i++)
         {
+            //Without Layer
+            //product[i].amountText = amount[i];
+            //product[i].amountText.text = $"x {product[i].amount}";
+
+            //With Layer
             product[i].amountText = amount[i];
-            product[i].amountText.text = $"x {product[i].amount}";
+            product[i].amountText.text = $"x {layers[(int)layer].currentAmount[i]}";
         }
     }
 
     public void CurrentAmount()
     {
-        product[(int)colour].currentAmount -= 1;
-        product[(int)colour].amountText.text = $"x {product[(int)colour].currentAmount}";
+        for(int i = 0; i < layers[(int)layer].currentAmount.Count - 1; i++)
+        {
+            //Without Layer
+            //product[i].amountText.text = $"x {product[i].amount}";
+
+            //With Layer
+            product[i].amountText.text = $"x {layers[(int)layer].currentAmount[i]}";
+        }
     }
 
-    void SetCurrentAmount()
+    public void SetCurrentAmount(int number)
+    {
+        //Without Layer
+        //product[(int)colour].currentAmount -= 1;
+        //product[(int)colour].amountText.text = $"x {product[(int)colour].currentAmount}";
+
+        //With Layer
+        layers[(int)layer].currentAmount[(int)colour] -= number;
+        product[(int)colour].amountText.text = $"x {layers[(int)layer].currentAmount[(int)colour]}";
+    }
+
+    void ResetCurrentAmount()
     {
         for(int i = 0; i < product.Length; i++)
         {
-            product[i].currentAmount = product[i].amount;
+            //Without Layer
+            //product[i].currentAmount = product[i].amount;
+
+            //With Layer
+            layers[(int)layer].currentAmount[i] = product[i].amount;
         }
     }
 
     public void InitializeGrid(List<GameObject> l)
     {
         grid = l;
+
+        for(int i = 0; i < layers.Length; i++)
+        {
+            for(int j = 0; j < grid.Count; j++)
+            {
+                layers[i].gridBool.Add(grid[j].GetComponent<Placement>().placeable);
+            }
+        }
     }
 
     void Empty()
     {
         Debug.Log("Empty;");
-        for(int i = 0; i < placed.Count; i++)
+
+        //Without Layer
+        //for(int i = 0; i < placed.Count; i++)
+        //{   
+        //    //Destroy(placed[i]);
+        //}
+        
+        //With Layer
+        for(int i = 0; i < layers[(int)layer].placed.Count; i++)
         {
-            Destroy(placed[i]);
+            Destroy(layers[(int)layer].placed[i]);
         }
 
-        placed.Clear();
+        //Without Layer
+        //placed.Clear();
 
-        Destroy(sealer);
-        Destroy(door);
+        //With Layer
+        layers[(int)layer].placed.Clear();
 
-        bSealer = false;
-        bDoor = false;
+        //Without Layer
+        //Destroy(sealer);
+        //Destroy(door);
+
+        //With Layer
+        Destroy(layers[(int)layer].sealer);
+        Destroy(layers[(int)layer].door);
+
+        //Without Layer
+        //bSealer = false;
+        //bDoor = false;
+
+        //With Layer
+        layers[(int)layer].bSealer = false;
+        layers[(int)layer].bDoor = false;
+
 
         grossMargin = 0;
         grossProfit = 0;
@@ -201,16 +301,62 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0; i < product.Length - 1; i++)
         {
-            product[i].currentAmount = product[i].amount;
-            product[i].amountText.text = $"x {product[i].currentAmount}";
+            //Without Layer
+            //product[i].currentAmount = product[i].amount;
+            //product[i].amountText.text = $"x {product[i].currentAmount}";
+
+            //With Layer
+            layers[(int)layer].currentAmount[i] = product[i].amount;
+            product[i].amountText.text = $"x {layers[(int)layer].currentAmount[i]}";
         }
 
         for(int i = 0; i < grid.Count; i++)
         {
-            grid[i].GetComponent<Placement>().placeable = false;
+            grid[i].GetComponent<Placement>().placeable = true;
+
+            layers[(int)layer].gridBool[i] = grid[i].GetComponent<Placement>().placeable;
         }
 
-        SetCurrentAmount();
+        ResetCurrentAmount();
+    }
+
+    public void LayerSelect(LayerNumber layerSelected)
+    {
+        for(int i = 0; i < layers[(int)layer].placed.Count; i++)
+        {
+            layers[(int)layer].placed[i].SetActive(false);
+        }
+
+        for(int i = 0; i < grid.Count; i++)
+        {
+            layers[(int)layer].gridBool[i] = grid[i].GetComponent<Placement>().placeable;
+        }
+
+        layer = layerSelected;
+
+        for(int i = 0; i < layers[(int)layer].placed.Count; i++)
+        {
+            layers[(int)layer].placed[i].SetActive(true);
+        }
+
+        for(int i = 0; i < grid.Count; i++)
+        {
+            layers[(int)layer].gridBool[i] = grid[i].GetComponent<Placement>().placeable;
+        }
+
+        CurrentAmount();
+    }
+
+    void InitializeLayers()
+    {
+        for(int i = 0; i < layers.Length; i++)
+        {
+
+            for(int j = 0; j < product.Length; j++)
+            {
+                layers[i].currentAmount.Add(product[j].amount);
+            }
+        }
     }
 }
 
@@ -220,7 +366,18 @@ public class Product
     public GameManager.PalletColour colour;
     public GameObject pallet;
     public int amount;
-    public int currentAmount;
     public int demand;
     public TMP_Text amountText;
+}
+
+[System.Serializable]
+public class Layers
+{
+    public GameManager.LayerNumber layer;
+    public List<bool> gridBool;
+    public List<GameObject> placed;
+    public GameObject sealer;
+    public GameObject door;
+    public bool bDoor, bSealer;
+    public List<int> currentAmount;
 }
