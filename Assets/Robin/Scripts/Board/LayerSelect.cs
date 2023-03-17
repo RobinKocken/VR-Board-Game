@@ -22,6 +22,12 @@ public class LayerSelect : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
+    void Start()
+    {
+        pos = transform.position;
+        startFloat = transform.position.x;
+    }
+
     void Update()
     {
         Button();

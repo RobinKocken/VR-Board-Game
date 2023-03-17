@@ -37,10 +37,6 @@ public class GameManager : MonoBehaviour
 
     public float costPerMeter;
     public float pickUpCost;
-    public float revenue;
-    public float grossMargin;
-    public float totalCost;
-    public float grossProfit;
 
     public Product[] product;
 
@@ -61,54 +57,38 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        TmpVisualize(revenue, totalCost, grossProfit, grossMargin);
+        TmpVisualize(layers[(int)layer].revenue, layers[(int)layer].totalCost, layers[(int)layer].grossProfit, layers[(int)layer].grossMargin);
         CurrentAmount();
     }
 
     void CheckDistance()
     {
-        totalCost = 0;
+        layers[(int)layer].totalCost = 0;
 
         for(int i = 0; i < product.Length; i++)
         {
-            //Without Layer
-            //if(product[i].currentAmount < product[i].amount)
-            //{
-            //    totalCost += product[i].demand * pickUpCost;
-            //}
-
-            //With Layer
             if(layers[(int)layer].currentAmount[i] < product[i].amount)
             {
-                totalCost += product[i].demand * pickUpCost;
+                layers[(int)layer].totalCost += product[i].demand * pickUpCost;
             }
         }
 
         for(int i = 0; i < placed.Count; i++)
         {
-            //Withouy Layer
-            //float distanceSealer = Vector3.Distance(placed[i].transform.position, sealer.transform.position) * 10;
-            //float distanceDoor = Vector3.Distance(sealer.transform.position, door.transform.position) * 10;            
-            
-            //With Layer
             float distanceSealer = Vector3.Distance(layers[(int)layer].placed[i].transform.position, layers[(int)layer].sealer.transform.position) * 10;
             float distanceDoor = Vector3.Distance(layers[(int)layer].sealer.transform.position, layers[(int)layer].door.transform.position) * 10;
 
             Debug.Log($"S: {(int)Mathf.Round(distanceSealer)} D: {(int)Mathf.Round(distanceDoor)}");
 
-            //Without Layer
-            //float f = product[(int)placed[i].GetComponent<Pallet>().pallet].demand / (product[(int)placed[i].GetComponent<Pallet>().pallet].amount - product[(int)placed[i].GetComponent<Pallet>().pallet].currentAmount);
-
-            //With Layer 
             float f = product[(int)layers[(int)layer].placed[i].GetComponent<Pallet>().pallet].demand / (layers[(int)layer].currentAmount[(int)placed[i].GetComponent<Pallet>().pallet] - layers[(int)layer].currentAmount[(int)placed[i].GetComponent<Pallet>().pallet]);
 
-            totalCost += ((int)Mathf.Round(distanceSealer) * costPerMeter) * f + ((int)Mathf.Round(distanceDoor) * costPerMeter) * f;
+            layers[(int)layer].totalCost += ((int)Mathf.Round(distanceSealer) * costPerMeter) * f + ((int)Mathf.Round(distanceDoor) * costPerMeter) * f;
 
-            grossProfit = revenue - totalCost;
-            grossMargin = (grossProfit / revenue) * 100;
+            layers[(int)layer].grossProfit = layers[(int)layer].revenue - layers[(int)layer].totalCost;
+            layers[(int)layer].grossMargin = (layers[(int)layer].grossProfit / layers[(int)layer].revenue) * 100;
         }
 
-        TmpVisualize(revenue, totalCost, grossProfit, grossMargin);
+        TmpVisualize(layers[(int)layer].revenue, layers[(int)layer].totalCost, layers[(int)layer].grossProfit, layers[(int)layer].grossMargin);
     }
 
     public void CheckIfCalculate(GameObject pallet)
@@ -117,22 +97,13 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Door");
 
-            //Withouy Layer
-            //bDoor = true;
-            //door = pallet;
-
-            //With Layer
             layers[(int)layer].bDoor = true;
             layers[(int)layer].door = pallet;
         }
         else if(colour == PalletColour.sealer)
         {
             Debug.Log("Sealer");
-            //Without Layer
-            //bSealer = true;
-            //sealer = pallet;
 
-            //With Layer
             layers[(int)layer].bSealer = true;
             layers[(int)layer].sealer = pallet;
         }
@@ -140,10 +111,6 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Placed");
 
-            //Without Layer
-            //placed.Add(pallet);
-
-            //With Layer
             layers[(int)layer].placed.Add(pallet);
         }
 
@@ -155,7 +122,6 @@ public class GameManager : MonoBehaviour
 
     void SelectPallet(GameObject pallet)
     {
-        //selected = product[(int)colour].pallet;
         selected = pallet;
     }
 
@@ -197,11 +163,6 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0; i < amount.Length; i++)
         {
-            //Without Layer
-            //product[i].amountText = amount[i];
-            //product[i].amountText.text = $"x {product[i].amount}";
-
-            //With Layer
             product[i].amountText = amount[i];
             product[i].amountText.text = $"x {layers[(int)layer].currentAmount[i]}";
         }
@@ -211,21 +172,12 @@ public class GameManager : MonoBehaviour
     {
         for(int i = 0; i < layers[(int)layer].currentAmount.Count - 1; i++)
         {
-            //Without Layer
-            //product[i].amountText.text = $"x {product[i].amount}";
-
-            //With Layer
             product[i].amountText.text = $"x {layers[(int)layer].currentAmount[i]}";
         }
     }
 
     public void SetCurrentAmount(int number)
     {
-        //Without Layer
-        //product[(int)colour].currentAmount -= 1;
-        //product[(int)colour].amountText.text = $"x {product[(int)colour].currentAmount}";
-
-        //With Layer
         layers[(int)layer].currentAmount[(int)colour] -= number;
         product[(int)colour].amountText.text = $"x {layers[(int)layer].currentAmount[(int)colour]}";
     }
@@ -234,10 +186,6 @@ public class GameManager : MonoBehaviour
     {
         for(int i = 0; i < product.Length; i++)
         {
-            //Without Layer
-            //product[i].currentAmount = product[i].amount;
-
-            //With Layer
             layers[(int)layer].currentAmount[i] = product[i].amount;
         }
     }
@@ -259,52 +207,26 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Empty;");
 
-        //Without Layer
-        //for(int i = 0; i < placed.Count; i++)
-        //{   
-        //    //Destroy(placed[i]);
-        //}
-        
-        //With Layer
         for(int i = 0; i < layers[(int)layer].placed.Count; i++)
         {
             Destroy(layers[(int)layer].placed[i]);
         }
 
-        //Without Layer
-        //placed.Clear();
-
-        //With Layer
         layers[(int)layer].placed.Clear();
 
-        //Without Layer
-        //Destroy(sealer);
-        //Destroy(door);
-
-        //With Layer
         Destroy(layers[(int)layer].sealer);
         Destroy(layers[(int)layer].door);
 
-        //Without Layer
-        //bSealer = false;
-        //bDoor = false;
-
-        //With Layer
         layers[(int)layer].bSealer = false;
         layers[(int)layer].bDoor = false;
 
 
-        grossMargin = 0;
-        grossProfit = 0;
-        totalCost = 0;
+        layers[(int)layer].grossMargin = 0;
+        layers[(int)layer].grossProfit = 0;
+        layers[(int)layer].totalCost = 0;
 
         for(int i = 0; i < product.Length - 1; i++)
         {
-            //Without Layer
-            //product[i].currentAmount = product[i].amount;
-            //product[i].amountText.text = $"x {product[i].currentAmount}";
-
-            //With Layer
             layers[(int)layer].currentAmount[i] = product[i].amount;
             product[i].amountText.text = $"x {layers[(int)layer].currentAmount[i]}";
         }
@@ -331,6 +253,12 @@ public class GameManager : MonoBehaviour
             layers[(int)layer].gridBool[i] = grid[i].GetComponent<Placement>().placeable;
         }
 
+        if(layers[(int)layer].sealer != null)   
+            layers[(int)layer].sealer.SetActive(false);
+
+        if(layers[(int)layer].door != null)
+            layers[(int)layer].door.SetActive(false);
+
         layer = layerSelected;
 
         for(int i = 0; i < layers[(int)layer].placed.Count; i++)
@@ -340,10 +268,17 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0; i < grid.Count; i++)
         {
-            layers[(int)layer].gridBool[i] = grid[i].GetComponent<Placement>().placeable;
+            grid[i].GetComponent<Placement>().placeable = layers[(int)layer].gridBool[i];
         }
 
+        if(layers[(int)layer].sealer != null)
+            layers[(int)layer].sealer.SetActive(true);
+
+        if(layers[(int)layer].door != null)
+            layers[(int)layer].door.SetActive(true);
+
         CurrentAmount();
+        TmpVisualize(layers[(int)layer].revenue, layers[(int)layer].totalCost, layers[(int)layer].grossProfit, layers[(int)layer].grossMargin);
     }
 
     void InitializeLayers()
@@ -379,4 +314,9 @@ public class Layers
     public GameObject door;
     public bool bDoor, bSealer;
     public List<int> currentAmount;
+
+    public float revenue;
+    public float grossMargin;
+    public float totalCost;
+    public float grossProfit;
 }
