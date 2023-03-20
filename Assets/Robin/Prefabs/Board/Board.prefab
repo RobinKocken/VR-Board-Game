@@ -11245,7 +11245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
-  interactable: {fileID: 8608152072081445589, guid: ce9e8178251d0e444972673a396ba369,
+  interactable: {fileID: 8608152072081445589, guid: 2d92d31016e24b84a982f5a5a5e47be8,
     type: 3}
   xCount: 16
   yCount: 14

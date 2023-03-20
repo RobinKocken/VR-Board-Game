@@ -40,7 +40,6 @@ public class GameManager : MonoBehaviour
 
     public Product[] product;
 
-    public List<GameObject> placed;
     public List<GameObject> grid;
 
     public TMP_Text tRevenue;
@@ -69,18 +68,19 @@ public class GameManager : MonoBehaviour
         {
             if(layers[(int)layer].currentAmount[i] < product[i].amount)
             {
-                layers[(int)layer].totalCost += product[i].demand * pickUpCost;
+                layers[(int)layer].totalCost += (product[i].demand * pickUpCost);
+                Debug.Log($"Total Cost: {product[i].demand * pickUpCost}");
             }
         }
 
-        for(int i = 0; i < placed.Count; i++)
+        for(int i = 0; i < layers[(int)layer].placed.Count; i++)
         {
             float distanceSealer = Vector3.Distance(layers[(int)layer].placed[i].transform.position, layers[(int)layer].sealer.transform.position) * 10;
             float distanceDoor = Vector3.Distance(layers[(int)layer].sealer.transform.position, layers[(int)layer].door.transform.position) * 10;
 
-            Debug.Log($"S: {(int)Mathf.Round(distanceSealer)} D: {(int)Mathf.Round(distanceDoor)}");
-
-            float f = product[(int)layers[(int)layer].placed[i].GetComponent<Pallet>().pallet].demand / (layers[(int)layer].currentAmount[(int)placed[i].GetComponent<Pallet>().pallet] - layers[(int)layer].currentAmount[(int)placed[i].GetComponent<Pallet>().pallet]);
+            float f = product[(int)layers[(int)layer].placed[i].GetComponent<Pallet>().pallet].demand /
+                product[(int)layers[(int)layer].placed[i].GetComponent<Pallet>().pallet].amount -
+                layers[(int)layer].currentAmount[(int)layers[(int)layer].placed[i].GetComponent<Pallet>().pallet];
 
             layers[(int)layer].totalCost += ((int)Mathf.Round(distanceSealer) * costPerMeter) * f + ((int)Mathf.Round(distanceDoor) * costPerMeter) * f;
 
