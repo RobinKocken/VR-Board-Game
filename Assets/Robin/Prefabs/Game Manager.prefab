@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4781713972569421843}
   - component: {fileID: 4781713972569421842}
+  - component: {fileID: 1130306797}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: GameManager
@@ -49,10 +50,6 @@ MonoBehaviour:
   selected: {fileID: 0}
   costPerMeter: 0.5
   pickUpCost: 2.5
-  revenue: 15000
-  grossMargin: 0
-  totalCost: 0
-  grossProfit: 0
   product:
   - colour: 0
     pallet: {fileID: 4302919154451997295, guid: 9f3eebb4cfe672f4ba6f586f14813540,
@@ -123,7 +120,6 @@ MonoBehaviour:
     amount: 0
     demand: 0
     amountText: {fileID: 0}
-  placed: []
   grid: []
   tRevenue: {fileID: 0}
   tTotalCost: {fileID: 0}
@@ -190,3 +186,64 @@ MonoBehaviour:
     grossMargin: 0
     totalCost: 0
     grossProfit: 0
+--- !u!114 &1130306797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4781713972569421840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd3da151d6e3445438b8c7aa5ac20f30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  language:
+  - description: Tutorial Button
+    english: 'Tutorial '
+    fontSizeE: 24
+    dutch: Tutorial
+    fontSizeD: 24
+    uiText: {fileID: 0}
+  - description: Settings Button
+    english: Settings
+    fontSizeE: 24
+    dutch: Instellingen
+    fontSizeD: 24
+    uiText: {fileID: 0}
+  - description: Quit Button
+    english: Quit
+    fontSizeE: 24
+    dutch: Afsluiten
+    fontSizeD: 24
+    uiText: {fileID: 0}
+  - description: English Button
+    english: English
+    fontSizeE: 24
+    dutch: Engels
+    fontSizeD: 24
+    uiText: {fileID: 0}
+  - description: Dutch Button
+    english: Dutch
+    fontSizeE: 24
+    dutch: Nederlands
+    fontSizeD: 24
+    uiText: {fileID: 0}
+  - description: Sealer
+    english: Sealer
+    fontSizeE: 0.065
+    dutch: Sealer
+    fontSizeD: 0.065
+    uiText: {fileID: 0}
+  - description: Door
+    english: Door
+    fontSizeE: 0.08
+    dutch: Deur
+    fontSizeD: 0.08
+    uiText: {fileID: 0}
+  - description: Empty
+    english: Empty
+    fontSizeE: 0.07
+    dutch: Leegmaken
+    fontSizeD: 0.04
+    uiText: {fileID: 0}
