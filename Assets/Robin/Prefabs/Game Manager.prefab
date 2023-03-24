@@ -120,6 +120,11 @@ MonoBehaviour:
     amount: 0
     demand: 0
     amountText: {fileID: 0}
+  - colour: 12
+    pallet: {fileID: 0}
+    amount: 0
+    demand: 0
+    amountText: {fileID: 0}
   grid: []
   tRevenue: {fileID: 0}
   tTotalCost: {fileID: 0}
@@ -241,9 +246,15 @@ MonoBehaviour:
     dutch: Deur
     fontSizeD: 0.08
     uiText: {fileID: 0}
-  - description: Empty
-    english: Empty
+  - description: Clear
+    english: Clear
     fontSizeE: 0.07
     dutch: Leegmaken
+    fontSizeD: 0.04
+    uiText: {fileID: 0}
+  - description: Delete
+    english: Delete
+    fontSizeE: 0.065
+    dutch: Verwijderen
     fontSizeD: 0.04
     uiText: {fileID: 0}

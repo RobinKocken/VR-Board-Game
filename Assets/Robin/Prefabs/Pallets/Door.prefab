@@ -9,14 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3599147826519679094}
-  - component: {fileID: 3269293429856973004}
+  - component: {fileID: 734905250822953805}
   - component: {fileID: 6488039022108979280}
   - component: {fileID: 3860721986700336229}
   - component: {fileID: 3096708047195254192}
   - component: {fileID: 4898492279530631080}
-  - component: {fileID: 560744217199793025}
-  m_Layer: 0
-  m_Name: Sealer
+  - component: {fileID: -5152247343163026188}
+  m_Layer: 6
+  m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,7 +37,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3269293429856973004
+--- !u!114 &734905250822953805
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c84414f3d5fe46649bd7391bbd3d62a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pallet: 9
+  pallet: 10
 --- !u!114 &6488039022108979280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,7 +183,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0fbc0d0f47fc85145ab95af979e5946b, type: 2}
+  - {fileID: 2100000, guid: 665cf20c99bfa004d87f2d73d70de93a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -205,7 +205,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &560744217199793025
+--- !u!65 &-5152247343163026188
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -216,5 +216,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_Center: {x: 0, y: 0, z: 0}

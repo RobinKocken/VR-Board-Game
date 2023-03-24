@@ -44,6 +44,8 @@ public class Grid : MonoBehaviour
                 current.transform.localPosition = new Vector3(current.transform.localPosition.x + posDif * x, current.transform.localPosition.y + posDif * y, transform.localPosition.z);
 
                 current.GetComponent<Placement>().gameManager = gameManager;
+                current.GetComponent<Placement>().x = x + 1;
+                current.GetComponent<Placement>().y = y + 1;
                 grid.Add(current);
             }
         }
