@@ -291,6 +291,16 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ShutdownYesButton()
+    {
+        Application.Quit();
+    }
+
+    public void ShutdownNoButton()
+    {
+        ShutdownButton();
+    }
+
     void ShutdownAnimationOpen()
     {
         yesButton.localPosition = Vector2.MoveTowards(yesButton.localPosition, yesButtonTargetPos.localPosition, shutdownSpeed * Time.deltaTime);

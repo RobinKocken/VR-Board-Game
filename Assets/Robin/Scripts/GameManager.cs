@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Xml.Serialization;
+using System.Diagnostics.Contracts;
 
 public class GameManager : MonoBehaviour
 {
@@ -48,6 +49,11 @@ public class GameManager : MonoBehaviour
     public TMP_Text tTotalCost;
     public TMP_Text tGrossProfit;
     public TMP_Text tGrossMargin;
+
+    public string sRevenue;
+    public string sTotalCost;
+    public string sGrossProfit;
+    public string sGrossMargin;
 
     public Layers[] layers;
 
@@ -151,10 +157,15 @@ public class GameManager : MonoBehaviour
 
     void TmpVisualize(float rev, float cost, float profit, float margin)
     {
-        tRevenue.text = $"Revenue: {rev}";
-        tTotalCost.text = $"Total Cost: {cost}";
-        tGrossProfit.text = $"Gross Profit {profit}";
-        tGrossMargin.text = $"Gross Margine {margin}%";
+        tRevenue.text = $"{sRevenue} {rev}";
+        tTotalCost.text = $"{sTotalCost} {cost}";
+        tGrossProfit.text = $"{sGrossProfit} {profit}";
+        tGrossMargin.text = $"{sGrossMargin} {margin}%";
+    }
+
+    public void TmpLanguageUpdate()
+    {
+        TmpVisualize(layers[(int)layer].revenue, layers[(int)layer].totalCost, layers[(int)layer].grossProfit, layers[(int)layer].grossMargin);
     }
 
     public void InitializeTmp(TMP_Text rev, TMP_Text cost, TMP_Text profit, TMP_Text margin, TMP_Text[] amount)

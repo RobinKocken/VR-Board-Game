@@ -2,10 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using static UnityEditor.Experimental.GraphView.GraphView;
+using System.Transactions;
 
 public class Localization : MonoBehaviour
 {
+    public GameManager gameManager;
     public Language[] language;
+
+    public string engRevenue;
+    public string engTotalCost;
+    public string engGrossProfit;
+    public string engGrossMargin;
+
+    public string nlRevenue;
+    public string nlTotalCost;
+    public string nlGrossProfit;
+    public string nlGrossMargin;
+
+    void Start()
+    {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+
+        gameManager.sRevenue = engRevenue;
+        gameManager.sTotalCost = engTotalCost;
+        gameManager.sGrossProfit = engGrossProfit;
+        gameManager.sGrossMargin = engGrossMargin;
+    }
 
     public void Dutch()
     {
@@ -14,8 +37,14 @@ public class Localization : MonoBehaviour
             language[i].uiText.text = language[i].dutch;
             language[i].uiText.fontSize = language[i].fontSizeD;
         }
-    }
 
+        gameManager.sRevenue = nlRevenue;
+        gameManager.sTotalCost = nlTotalCost;
+        gameManager.sGrossProfit = nlGrossProfit;
+        gameManager.sGrossMargin = nlGrossMargin;
+
+        gameManager.TmpLanguageUpdate();
+    }
     public void English()
     {
         for(int i = 0; i < language.Length; i++)
@@ -23,6 +52,13 @@ public class Localization : MonoBehaviour
             language[i].uiText.text = language[i].english;
             language[i].uiText.fontSize = language[i].fontSizeE;
         }
+
+        gameManager.sRevenue = engRevenue;
+        gameManager.sTotalCost = engTotalCost;
+        gameManager.sGrossProfit =engGrossProfit;
+        gameManager.sGrossMargin = engGrossMargin;
+
+        gameManager.TmpLanguageUpdate();
     }
 }
 
