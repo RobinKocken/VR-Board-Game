@@ -65,7 +65,6 @@ public class Localization : MonoBehaviour
 [System.Serializable]
 public class Language
 {
-    public string description;
     public string english;
     public float fontSizeE;
     public string dutch;

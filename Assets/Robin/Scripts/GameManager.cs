@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     public Product[] product;
 
     public List<GameObject> grid;
+    public List<GameObject> floorGrid;
 
     public TMP_Text tRevenue;
     public TMP_Text tTotalCost;
@@ -68,7 +69,7 @@ public class GameManager : MonoBehaviour
         CurrentAmount();
     }
 
-    void CheckDistance()
+    void Calculate()
     {
         layers[(int)layer].totalCost = 0;
 
@@ -121,7 +122,7 @@ public class GameManager : MonoBehaviour
 
         if(layers[(int)layer].door && layers[(int)layer].sealer)
         {
-            CheckDistance();
+            Calculate();
         }
     }
 
@@ -204,9 +205,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void InitializeGrid(List<GameObject> l)
+    public void InitializeGrid(List<GameObject> l, List<GameObject> f)
     {
         grid = l;
+        floorGrid = f;
 
         for(int i = 0; i < layers.Length; i++)
         {
@@ -259,8 +261,6 @@ public class GameManager : MonoBehaviour
 
     void Empty()
     {
-        Debug.Log("Empty;");
-
         for(int i = 0; i < layers[(int)layer].placed.Count; i++)
         {
             Destroy(layers[(int)layer].placed[i]);
@@ -354,6 +354,14 @@ public class GameManager : MonoBehaviour
 
         }
     }
+
+    public void FloorPlacment()
+    {
+        for(int i = 0; i < floorGrid.Count; i++)
+        {
+
+        }
+    }
 }
 
 [System.Serializable]
@@ -361,6 +369,7 @@ public class Product
 {
     public GameManager.PalletColour colour;
     public GameObject pallet;
+    public GameObject floorPallet;
     public int amount;
     public int demand;
     public TMP_Text amountText;

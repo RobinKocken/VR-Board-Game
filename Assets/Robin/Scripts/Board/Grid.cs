@@ -9,11 +9,16 @@ public class Grid : MonoBehaviour
 
     public GameObject interactable;
 
+    public GameObject floorSpawner;
+    public GameObject floorGridObject;
+
     public int xCount;
     public int yCount;
     public float posDif;
+    public float posDifFloor;
 
     public List<GameObject> grid;
+    public List<GameObject> floorGrid;
 
     public TMP_Text tRevenue;
     public TMP_Text tTotalCost;
@@ -31,7 +36,8 @@ public class Grid : MonoBehaviour
     {
         gameManager.InitializeTmp(tRevenue, tTotalCost, tgrossProfit, tgrossMargin, amount);
         CreateGrid();
-        gameManager.InitializeGrid(grid);
+        CreateFloorGrid();
+        gameManager.InitializeGrid(grid, floorGrid);
     }
 
     void CreateGrid()
@@ -44,9 +50,26 @@ public class Grid : MonoBehaviour
                 current.transform.localPosition = new Vector3(current.transform.localPosition.x + posDif * x, current.transform.localPosition.y + posDif * y, transform.localPosition.z);
 
                 current.GetComponent<Placement>().gameManager = gameManager;
-                current.GetComponent<Placement>().x = x + 1;
-                current.GetComponent<Placement>().y = y + 1;
+                current.GetComponent<Placement>().x = x;
+                current.GetComponent<Placement>().y = y;
                 grid.Add(current);
+            }
+        }
+    }
+
+    void CreateFloorGrid()
+    {
+        for(int x = 0; x < xCount; x++)
+        {
+            for(int y = 0; y < yCount; y++)
+            {
+                GameObject current = Instantiate(floorGridObject, floorSpawner.transform.position, floorGridObject.transform.rotation, floorSpawner.transform);
+                current.transform.position = new Vector3(current.transform.position.x + posDifFloor * y, current.transform.position.y, current.transform.position.z + posDifFloor * x);
+
+                current.GetComponent<Placement>().gameManager = gameManager;
+                current.GetComponent<Placement>().x = x;
+                current.GetComponent<Placement>().y = y;
+                floorGrid.Add(current);
             }
         }
     }
