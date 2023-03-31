@@ -4565,23 +4565,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 999533313458327686, guid: 3e82b6abc1a800c44a1d5add2596fe4a,
         type: 3}
-      propertyPath: floorGrid
-      value: 
-      objectReference: {fileID: 4164398551970722041, guid: 31d167d18e554b744865a728e66d9677,
-        type: 3}
-    - target: {fileID: 999533313458327686, guid: 3e82b6abc1a800c44a1d5add2596fe4a,
-        type: 3}
-      propertyPath: posDifFloor
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 999533313458327686, guid: 3e82b6abc1a800c44a1d5add2596fe4a,
-        type: 3}
       propertyPath: floorSpawner
       value: 
       objectReference: {fileID: 600849643}
-    - target: {fileID: 7106119604842525656, guid: 3e82b6abc1a800c44a1d5add2596fe4a,
+    - target: {fileID: 999533313458327686, guid: 3e82b6abc1a800c44a1d5add2596fe4a,
         type: 3}
-      propertyPath: m_IsActive
+      propertyPath: floorGrid.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8085582930488437345, guid: 3e82b6abc1a800c44a1d5add2596fe4a,

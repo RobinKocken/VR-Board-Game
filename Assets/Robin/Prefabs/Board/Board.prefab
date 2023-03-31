@@ -11780,12 +11780,17 @@ MonoBehaviour:
   interactable: {fileID: 8608152072081445589, guid: 2d92d31016e24b84a982f5a5a5e47be8,
     type: 3}
   floorSpawner: {fileID: 0}
-  floorGrid: {fileID: 1667487667654722020, guid: 80e5d1e94dd7086468d89e3fd4fe5ea1,
+  floorGridObject: {fileID: 4164398551970722041, guid: 31d167d18e554b744865a728e66d9677,
     type: 3}
   xCount: 16
   yCount: 14
   posDif: -0.1
+  posDifFloor: 1
   grid: []
+  floorGrid:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   tRevenue: {fileID: 2439808628814081259}
   tTotalCost: {fileID: 6650434437317174492}
   tgrossProfit: {fileID: 5518636044809150757}

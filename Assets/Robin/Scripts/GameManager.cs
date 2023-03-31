@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using System.Xml.Serialization;
 using System.Diagnostics.Contracts;
+using Unity.VisualScripting;
+using UnityEditor.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -44,7 +46,7 @@ public class GameManager : MonoBehaviour
     public Product[] product;
 
     public List<GameObject> grid;
-    public List<GameObject> floorGrid;
+    public List<GameObject> gridFloor;
 
     public TMP_Text tRevenue;
     public TMP_Text tTotalCost;
@@ -208,13 +210,13 @@ public class GameManager : MonoBehaviour
     public void InitializeGrid(List<GameObject> l, List<GameObject> f)
     {
         grid = l;
-        floorGrid = f;
+        gridFloor = f;
 
         for(int i = 0; i < layers.Length; i++)
         {
             for(int j = 0; j < grid.Count; j++)
             {
-                layers[i].gridBool.Add(grid[j].GetComponent<Placement>().placeable);
+                layers[i].gridBool.Add(grid[j].GetComponent<Placement>().placed);
             }
         }
     }
@@ -268,6 +270,13 @@ public class GameManager : MonoBehaviour
 
         layers[(int)layer].placed.Clear();
 
+        for(int i = 0; i < layers[(int)layer].placedFloor.Count; i++)
+        {
+            Destroy(layers[(int)layer].placedFloor[i]);
+        }
+
+        layers[(int)layer].placedFloor.Clear();
+
         Destroy(layers[(int)layer].sealer);
         Destroy(layers[(int)layer].door);
 
@@ -287,9 +296,9 @@ public class GameManager : MonoBehaviour
 
         for(int i = 0; i < grid.Count; i++)
         {
-            grid[i].GetComponent<Placement>().placeable = true;
+            grid[i].GetComponent<Placement>().placed = false;
 
-            layers[(int)layer].gridBool[i] = grid[i].GetComponent<Placement>().placeable;
+            layers[(int)layer].gridBool[i] = grid[i].GetComponent<Placement>().placed;
         }
 
         ResetCurrentAmount();
@@ -302,9 +311,14 @@ public class GameManager : MonoBehaviour
             layers[(int)layer].placed[i].SetActive(false);
         }
 
+        for(int i = 0; i < layers[(int)layer].placedFloor.Count; i++)
+        {
+            layers[(int)layer].placedFloor[i].SetActive(false);
+        }
+
         for(int i = 0; i < grid.Count; i++)
         {
-            layers[(int)layer].gridBool[i] = grid[i].GetComponent<Placement>().placeable;
+            layers[(int)layer].gridBool[i] = grid[i].GetComponent<Placement>().placed;
         }
 
         if(layers[(int)layer].sealer != null)   
@@ -320,9 +334,14 @@ public class GameManager : MonoBehaviour
             layers[(int)layer].placed[i].SetActive(true);
         }
 
+        for(int i = 0; i < layers[(int)layer].placedFloor.Count; i++)
+        {
+            layers[(int)layer].placedFloor[i].SetActive(true);
+        }
+
         for(int i = 0; i < grid.Count; i++)
         {
-            grid[i].GetComponent<Placement>().placeable = layers[(int)layer].gridBool[i];
+            grid[i].GetComponent<Placement>().placed = layers[(int)layer].gridBool[i];
         }
 
         if(layers[(int)layer].sealer != null)
@@ -347,19 +366,240 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void CheckIfValid()
+    public bool CheckIfValid(bool isValid, int x, int y)
     {
-        for(int i = 0; i < layers[(int)layer].placed.Count; i++)
-        {
+        int n = 0;
 
+        Debug.Log($"X: {x} - Y: {y}");
+
+        if(x == 0)
+        {
+            if(y == 0)
+            {
+                n = Validate(x, y, 1, 1, 0, 0, n);
+
+                if(n == 2)
+                {
+                    isValid = false;
+                }
+                else if(n < 2)
+                {
+                    isValid = true;
+                }
+            }
+            else if(y == 13)
+            {
+                n = Validate(x, y, 1, 0, 0, 1, n);
+
+                if(n == 2)
+                {
+                    isValid = false;
+                }
+                else if(n < 2)
+                {
+                    isValid = true;
+                }
+            }
+            else
+            {
+                n = Validate(x, y, 1, 1, 0, 1, n);
+
+                if(n == 3)
+                {
+                    isValid = false;
+                }
+                else if(n < 3)
+                {
+                    isValid = true;
+                }
+            }
+        }
+        else if(x == 15)
+        {
+            if(y == 0)
+            {
+                n = Validate(x, y, 0, 1, 1, 0, n);
+
+                if(n == 2)
+                {
+                    isValid = false;
+                }
+                else if(n < 2)
+                {
+                    isValid = true;
+                }
+            }
+            else if(y == 13)
+            {
+                n = Validate(x, y, 0, 0, 1, 1, n);
+
+                if(n == 2)
+                {
+                    isValid = false;
+                }
+                else if(n < 2)
+                {
+                    isValid = true;
+                }
+            }
+            else
+            {
+                n = Validate(x, y, 0, 1, 1, 1, n);
+
+                if(n == 3)
+                {
+                    isValid = false;
+                }
+                else if(n < 3)
+                {
+                    isValid = true;
+                }
+            }
+        }
+        else
+        {
+            if(y == 0)
+            {
+                n = Validate(x, y, 1, 1, 1, 0, n);
+
+                if(n == 3)
+                {
+                    isValid = false;
+                }
+                else if(n < 3)
+                {
+                    isValid = true;
+                }
+            }
+            else if(y == 13)
+            {
+                n = Validate(x, y, 1, 0, 1, 1, n);
+
+                if(n == 3)
+                {
+                    isValid = false;
+                }
+                else if(n < 3)
+                {
+                    isValid = true;
+                }
+            }
+            else
+            {
+                n = Validate(x, y, 1, 1, 1, 1, n);
+
+                if(n == 4)
+                {
+                    isValid = false;
+                }
+                else if(n < 4)
+                {
+                    isValid = true;
+                }
+            }
+        }
+
+        return isValid;
+    }
+
+    int Validate(int x, int y, int plusX, int plusY, int minX, int minY, int n)
+    {
+        for(int i = 0; i < grid.Count; i++)
+        {
+            if(plusX == 1)
+            {
+                if(grid[i].GetComponent<Placement>().x == x + 1 && grid[i].GetComponent<Placement>().y == y)
+                {
+                    if(grid[i].GetComponent<Placement>().placed == true)
+                    {
+                        n += 1;
+
+                        Debug.Log("Plus X: " + (x + 1));
+                    }
+                }
+            }
+
+            if(minX == 1)
+            {
+                if(grid[i].GetComponent<Placement>().x == x - 1 && grid[i].GetComponent<Placement>().y == y)
+                {
+                    if(grid[i].GetComponent<Placement>().placed == true)
+                    {
+                        n += 1;
+
+                        Debug.Log("Min X: " + (x - 1));
+                    }
+                }
+            }
+
+            if(plusY == 1)
+            {
+                if(grid[i].GetComponent<Placement>().y == y + 1 && grid[i].GetComponent<Placement>().x == x)
+                {
+                    if(grid[i].GetComponent<Placement>().placed == true)
+                    {
+                        n += 1;
+
+                        Debug.Log("Plus Y: " + (y + 1));
+                    }
+                }
+            }
+
+            if(minY == 1)
+            {
+                if(grid[i].GetComponent<Placement>().y == y - 1 && grid[i].GetComponent<Placement>().x == x)
+                {
+                    if(grid[i].GetComponent<Placement>().placed == true)
+                    {
+                        n += 1;
+
+                        Debug.Log("Min Y: " + (y - 1));
+                    }
+                }
+            }
+        }
+
+
+        Debug.Log("N: " + n);
+        return n;
+    }
+
+    public void FloorPlacment(int x, int y)
+    {
+        for(int i = 0; i < gridFloor.Count; i++)
+        {
+            if(gridFloor[i].GetComponent<Placement>().x == x)
+            {
+                if(gridFloor[i].GetComponent<Placement>().y == y)
+                {
+                    GameObject pallet = Instantiate(product[(int)layer].pallet, gridFloor[i].transform.position, Quaternion.identity, gridFloor[i].transform);
+                    layers[(int)layer].placedFloor.Add(pallet);
+                    return;
+                }
+            }
         }
     }
 
-    public void FloorPlacment()
+    public void DeleteFloor(int x, int y)
     {
-        for(int i = 0; i < floorGrid.Count; i++)
+        for(int i = 0; i < gridFloor.Count; i++)
         {
+            if(gridFloor[i].GetComponent<Placement>().x == x)
+            {
+                if(gridFloor[i].GetComponent<Placement>().y == y)
+                {
+                    for(int j = 0; j < layers[(int)layer].placedFloor.Count; j++)
+                    {
+                        if(layers[(int)layer].placedFloor[j] == gridFloor[i].transform.GetChild(0).gameObject)
+                        {
+                            layers[(int)layer].placedFloor.RemoveAt(j);
+                            Destroy(gridFloor[i].transform.GetChild(0).gameObject);
 
+                            return;
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -381,6 +621,7 @@ public class Layers
     public GameManager.LayerNumber layer;
     public List<bool> gridBool;
     public List<GameObject> placed;
+    public List<GameObject> placedFloor;
     public GameObject sealer;
     public GameObject door;
     public bool bDoor, bSealer;

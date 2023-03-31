@@ -6,26 +6,31 @@ public class Placement : MonoBehaviour
 {
     public GameManager gameManager;
     public GameObject pallet;
-    public bool placeable = true;
+    public bool placed;
     public int x, y;
 
     public void Place()
     {
-        if(placeable && gameManager.selected != null)
+        if(!placed)
+            placed = gameManager.CheckIfValid(placed ,x ,y);
+
+        if(placed && gameManager.selected != null)
         {
             if(gameManager.layers[(int)gameManager.layer].currentAmount[(int)gameManager.colour] > 0)
             {
                 pallet = Instantiate(gameManager.selected, transform.GetChild(0).position, transform.rotation);
                 gameManager.SetCurrentAmount(1);
-                placeable = false;
+                placed = true;
 
                 gameManager.CheckIfCalculate(pallet);
+                gameManager.FloorPlacment(x, y);
             }
         }
-        else if(!placeable && gameManager.colour == GameManager.PalletColour.delete)
+        else if(placed && gameManager.colour == GameManager.PalletColour.delete)
         {
             gameManager.Delete(pallet);
-            placeable = true;
+            gameManager.DeleteFloor(x, y);
+            placed = false;
         }
     }
 }
