@@ -10,6 +10,9 @@ public class Tutorial : MonoBehaviour
 
     public bool tutorialActive;
 
+    public GameObject[] engVersion;
+    public GameObject[] nlVersion;
+
     void Start()
     {
         tutorial.gameObject.SetActive(false);
