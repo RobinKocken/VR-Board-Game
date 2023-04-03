@@ -12,13 +12,17 @@ public class Placement : MonoBehaviour
     public void Place()
     {
         if(!placed)
-            placed = gameManager.CheckIfValid(placed ,x ,y);
+            placed = gameManager.StartValidation(false, x, y);
+
+        //Debug.Log(placed);
 
         if(placed && gameManager.selected != null)
         {
             if(gameManager.layers[(int)gameManager.layer].currentAmount[(int)gameManager.colour] > 0)
             {
                 pallet = Instantiate(gameManager.selected, transform.GetChild(0).position, transform.rotation);
+                pallet.GetComponent<Pallet>().Pos(x, y);
+
                 gameManager.SetCurrentAmount(1);
                 placed = true;
 

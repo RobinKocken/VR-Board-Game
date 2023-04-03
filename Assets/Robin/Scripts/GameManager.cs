@@ -354,232 +354,6 @@ public class GameManager : MonoBehaviour
         TmpVisualize(layers[(int)layer].revenue, layers[(int)layer].totalCost, layers[(int)layer].grossProfit, layers[(int)layer].grossMargin);
     }
 
-    void InitializeLayers()
-    {
-        for(int i = 0; i < layers.Length; i++)
-        {
-
-            for(int j = 0; j < product.Length; j++)
-            {
-                layers[i].currentAmount.Add(product[j].amount);
-            }
-        }
-    }
-
-    public bool CheckIfValid(bool isValid, int x, int y)
-    {
-        int n = 0;
-
-        Debug.Log($"X: {x} - Y: {y}");
-
-        if(x == 0)
-        {
-            if(y == 0)
-            {
-                n = Validate(x, y, 1, 1, 0, 0, n);
-
-                if(n == 2)
-                {
-                    isValid = false;
-                }
-                else if(n < 2)
-                {
-                    isValid = true;
-                }
-            }
-            else if(y == 13)
-            {
-                n = Validate(x, y, 1, 0, 0, 1, n);
-
-                if(n == 2)
-                {
-                    isValid = false;
-                }
-                else if(n < 2)
-                {
-                    isValid = true;
-                }
-            }
-            else
-            {
-                n = Validate(x, y, 1, 1, 0, 1, n);
-
-                if(n == 3)
-                {
-                    isValid = false;
-                }
-                else if(n < 3)
-                {
-                    isValid = true;
-                }
-            }
-        }
-        else if(x == 15)
-        {
-            if(y == 0)
-            {
-                n = Validate(x, y, 0, 1, 1, 0, n);
-
-                if(n == 2)
-                {
-                    isValid = false;
-                }
-                else if(n < 2)
-                {
-                    isValid = true;
-                }
-            }
-            else if(y == 13)
-            {
-                n = Validate(x, y, 0, 0, 1, 1, n);
-
-                if(n == 2)
-                {
-                    isValid = false;
-                }
-                else if(n < 2)
-                {
-                    isValid = true;
-                }
-            }
-            else
-            {
-                n = Validate(x, y, 0, 1, 1, 1, n);
-
-                if(n == 3)
-                {
-                    isValid = false;
-                }
-                else if(n < 3)
-                {
-                    isValid = true;
-                }
-            }
-        }
-        else
-        {
-            if(y == 0)
-            {
-                n = Validate(x, y, 1, 1, 1, 0, n);
-
-                if(n == 3)
-                {
-                    isValid = false;
-                }
-                else if(n < 3)
-                {
-                    isValid = true;
-                }
-            }
-            else if(y == 13)
-            {
-                n = Validate(x, y, 1, 0, 1, 1, n);
-
-                if(n == 3)
-                {
-                    isValid = false;
-                }
-                else if(n < 3)
-                {
-                    isValid = true;
-                }
-            }
-            else
-            {
-                n = Validate(x, y, 1, 1, 1, 1, n);
-
-                if(n == 4)
-                {
-                    isValid = false;
-                }
-                else if(n < 4)
-                {
-                    isValid = true;
-                }
-            }
-        }
-
-        return isValid;
-    }
-
-    int Validate(int x, int y, int plusX, int plusY, int minX, int minY, int n)
-    {
-        for(int i = 0; i < grid.Count; i++)
-        {
-            if(plusX == 1)
-            {
-                if(grid[i].GetComponent<Placement>().x == x + 1 && grid[i].GetComponent<Placement>().y == y)
-                {
-                    if(grid[i].GetComponent<Placement>().placed == true)
-                    {
-                        n += 1;
-
-                        Debug.Log("Plus X: " + (x + 1));
-                    }
-                }
-            }
-
-            if(minX == 1)
-            {
-                if(grid[i].GetComponent<Placement>().x == x - 1 && grid[i].GetComponent<Placement>().y == y)
-                {
-                    if(grid[i].GetComponent<Placement>().placed == true)
-                    {
-                        n += 1;
-
-                        Debug.Log("Min X: " + (x - 1));
-                    }
-                }
-            }
-
-            if(plusY == 1)
-            {
-                if(grid[i].GetComponent<Placement>().y == y + 1 && grid[i].GetComponent<Placement>().x == x)
-                {
-                    if(grid[i].GetComponent<Placement>().placed == true)
-                    {
-                        n += 1;
-
-                        Debug.Log("Plus Y: " + (y + 1));
-                    }
-                }
-            }
-
-            if(minY == 1)
-            {
-                if(grid[i].GetComponent<Placement>().y == y - 1 && grid[i].GetComponent<Placement>().x == x)
-                {
-                    if(grid[i].GetComponent<Placement>().placed == true)
-                    {
-                        n += 1;
-
-                        Debug.Log("Min Y: " + (y - 1));
-                    }
-                }
-            }
-        }
-
-
-        Debug.Log("N: " + n);
-        return n;
-    }
-
-    public void FloorPlacment(int x, int y)
-    {
-        for(int i = 0; i < gridFloor.Count; i++)
-        {
-            if(gridFloor[i].GetComponent<Placement>().x == x)
-            {
-                if(gridFloor[i].GetComponent<Placement>().y == y)
-                {
-                    GameObject pallet = Instantiate(product[(int)layer].pallet, gridFloor[i].transform.position, Quaternion.identity, gridFloor[i].transform);
-                    layers[(int)layer].placedFloor.Add(pallet);
-                    return;
-                }
-            }
-        }
-    }
-
     public void DeleteFloor(int x, int y)
     {
         for(int i = 0; i < gridFloor.Count; i++)
@@ -601,6 +375,283 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    void InitializeLayers()
+    {
+        for(int i = 0; i < layers.Length; i++)
+        {
+
+            for(int j = 0; j < product.Length; j++)
+            {
+                layers[i].currentAmount.Add(product[j].amount);
+            }
+        }
+    }
+
+    public void FloorPlacment(int x, int y)
+    {
+        for(int i = 0; i < gridFloor.Count; i++)
+        {
+            if(gridFloor[i].GetComponent<Placement>().x == x)
+            {
+                if(gridFloor[i].GetComponent<Placement>().y == y)
+                {
+                    GameObject pallet = Instantiate(product[(int)layer].floorPallet, gridFloor[i].transform.position, Quaternion.identity, gridFloor[i].transform);
+                    layers[(int)layer].placedFloor.Add(pallet);
+                    return;
+                }
+            }
+        }
+    }
+
+    public bool StartValidation(bool isValid, int x, int y)
+    {
+        for(int i = 0; i < layers[(int)layer].placed.Count; i++)
+        {
+            isValid = CheckForPos(false, isValid, layers[(int)layer].placed[i].GetComponent<Pallet>().x, layers[(int)layer].placed[i].GetComponent<Pallet>().y, x, y);
+
+            if(!isValid)
+            {
+                return isValid;
+            }
+        }
+        
+        if(isValid)
+        {
+            isValid = CheckForPos(true, isValid, x, y, 0, 0);
+        }
+        else if(!isValid)
+        {
+            if(layers[(int)layer].placed.Count == 0)
+            {
+                isValid = true;
+            }
+        }
+
+        return isValid;
+    }
+
+    bool CheckForPos(bool isCurrent ,bool isValid, int x, int y, int potentialX, int potentialY)
+    {
+        int n = 0;
+
+        if(x == 0)
+        {
+            if(y == 0)
+            {
+                n = Validate(isCurrent, x, y, 1, 1, 0, 0, n, potentialX, potentialY);
+
+                if(n == 2)
+                {
+                    isValid = false;
+                }
+                else if(n < 2)
+                {
+                    isValid = true;
+                }
+            }
+            else if(y == 13)
+            {
+                n = Validate(isCurrent, x, y, 1, 0, 0, 1, n, potentialX, potentialY);
+
+                if(n == 2)
+                {
+                    isValid = false;
+                }
+                else if(n < 2)
+                {
+                    isValid = true;
+                }
+            }
+            else
+            {
+                n = Validate(isCurrent, x, y, 1, 1, 0, 1, n, potentialX, potentialY);
+
+                if(n == 3)
+                {
+                    isValid = false;
+                }
+                else if(n < 3)
+                {
+                    isValid = true;
+                }
+            }
+        }
+        else if(x == 15)
+        {
+            if(y == 0)
+            {
+                n = Validate(isCurrent, x, y, 0, 1, 1, 0, n, potentialX, potentialY);
+
+                if(n == 2)
+                {
+                    isValid = false;
+                }
+                else if(n < 2)
+                {
+                    isValid = true;
+                }
+            }
+            else if(y == 13)
+            {
+                n = Validate(isCurrent, x, y, 0, 0, 1, 1, n, potentialX, potentialY);
+
+                if(n == 2)
+                {
+                    isValid = false;
+                }
+                else if(n < 2)
+                {
+                    isValid = true;
+                }
+            }
+            else
+            {
+                n = Validate(isCurrent, x, y, 0, 1, 1, 1, n, potentialX, potentialY);
+
+                if(n == 3)
+                {
+                    isValid = false;
+                }
+                else if(n < 3)
+                {
+                    isValid = true;
+                }
+            }
+        }
+        else
+        {
+            if(y == 0)
+            {
+                n = Validate(isCurrent, x, y, 1, 1, 1, 0, n, potentialX, potentialY);
+
+                if(n == 3)
+                {
+                    isValid = false;
+                }
+                else if(n < 3)
+                {
+                    isValid = true;
+                }
+            }
+            else if(y == 13)
+            {
+                n = Validate(isCurrent, x, y, 1, 0, 1, 1, n, potentialX, potentialY);
+
+                if(n == 3)
+                {
+                    isValid = false;
+                }
+                else if(n < 3)
+                {
+                    isValid = true;
+                }
+            }
+            else
+            {
+                n = Validate(isCurrent ,x, y, 1, 1, 1, 1, n, potentialX, potentialY);
+
+                if(n == 4)
+                {
+                    isValid = false;
+                }
+                else if(n < 4)
+                {
+                    isValid = true;
+                }
+            }
+        }
+
+        return isValid;
+    }
+
+    int Validate(bool isCurrent ,int x, int y, int plusX, int plusY, int minX, int minY, int n, int potentialX, int potentialY)
+    {
+        for(int i = 0; i < grid.Count; i++)
+        {
+            if(plusX == 1)
+            {
+                if(grid[i].GetComponent<Placement>().x == x + 1 && grid[i].GetComponent<Placement>().y == y)
+                {
+                    if(grid[i].GetComponent<Placement>().placed == true)
+                    {
+                        n += 1;
+                    }
+                    else if(!isCurrent)
+                    {
+                        if(x + 1 == potentialX && y == potentialY)
+                        {
+                            //Debug.Log("X + 1");
+                            n += 1;
+                        }
+                    }
+                }
+            }
+
+            if(minX == 1)
+            {
+                if(grid[i].GetComponent<Placement>().x == x - 1 && grid[i].GetComponent<Placement>().y == y)
+                {
+                    if(grid[i].GetComponent<Placement>().placed == true)
+                    {
+                        n += 1;
+
+                        //Debug.Log("Min X: " + (x - 1));
+                    }
+                    else if(!isCurrent)
+                    {
+                        if(x - 1 == potentialX && y == potentialY)
+                        {
+                            n += 1;
+                        }
+                    }
+                }
+            }
+
+            if(plusY == 1)
+            {
+                if(grid[i].GetComponent<Placement>().y == y + 1 && grid[i].GetComponent<Placement>().x == x)
+                {
+                    if(grid[i].GetComponent<Placement>().placed == true)
+                    {
+                        n += 1;
+
+                        //Debug.Log("Plus Y: " + (y + 1));
+                    }
+                    else if(!isCurrent)
+                    {
+                        if(y + 1 == potentialY && x == potentialX)
+                        {
+                            n += 1;
+                        }
+                    }
+                }
+            }
+
+            if(minY == 1)
+            {
+                if(grid[i].GetComponent<Placement>().y == y - 1 && grid[i].GetComponent<Placement>().x == x)
+                {
+                    if(grid[i].GetComponent<Placement>().placed == true)
+                    {
+                        n += 1;
+
+                        //Debug.Log("Min Y: " + (y - 1));
+                    }
+                    else if(!isCurrent)
+                    {
+                        if(y - 1 == potentialY && x == potentialX)
+                        {
+                            n += 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Debug.Log("N: " + n);
+        return n;
     }
 }
 
