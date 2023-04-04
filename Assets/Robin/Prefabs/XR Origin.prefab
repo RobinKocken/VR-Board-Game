@@ -1200,7 +1200,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2100841971}
   - component: {fileID: 2100841968}
-  - component: {fileID: 2100841970}
   - component: {fileID: 2100841969}
   m_Layer: 0
   m_Name: UI Camera
@@ -1247,7 +1246,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.02
+  near clip plane: 0.25
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -1267,14 +1266,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &2100841970
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2100841967}
-  m_Enabled: 1
 --- !u!114 &2100841969
 MonoBehaviour:
   m_ObjectHideFlags: 0

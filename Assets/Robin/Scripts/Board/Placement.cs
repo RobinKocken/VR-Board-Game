@@ -16,7 +16,7 @@ public class Placement : MonoBehaviour
 
         //Debug.Log(placed);
 
-        if(placed && gameManager.selected != null)
+        if(placed && gameManager.selected != null && pallet == null)
         {
             if(gameManager.layers[(int)gameManager.layer].currentAmount[(int)gameManager.colour] > 0)
             {
@@ -30,7 +30,7 @@ public class Placement : MonoBehaviour
                 gameManager.FloorPlacment(x, y);
             }
         }
-        else if(placed && gameManager.colour == GameManager.PalletColour.delete)
+        else if(placed && gameManager.colour == GameManager.PalletColour.delete && pallet != null)
         {
             gameManager.Delete(pallet);
             gameManager.DeleteFloor(x, y);

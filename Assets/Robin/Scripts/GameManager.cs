@@ -67,40 +67,55 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        TmpVisualize(layers[(int)layer].revenue, layers[(int)layer].totalCost, layers[(int)layer].grossProfit, layers[(int)layer].grossMargin);
         CurrentAmount();
     }
 
     void Calculate()
     {
         layers[(int)layer].totalCost = 0;
+        float totalDemand = 0;
 
         for(int i = 0; i < product.Length; i++)
         {
-            if(layers[(int)layer].currentAmount[i] < product[i].amount)
-            {
-                layers[(int)layer].totalCost += (product[i].demand * pickUpCost);
-                Debug.Log($"Total Cost: {product[i].demand * pickUpCost}");
-            }
+            layers[(int)layer].totalCost += product[i].demand * pickUpCost;
+            totalDemand += product[i].demand;
         }
+
+        int xDistance = layers[(int)layer].sealer.GetComponent<Pallet>().x - layers[(int)layer].door.GetComponent<Pallet>().x;
+
+        if(xDistance < 0)
+            xDistance *= -1;
+
+        int yDistance = layers[(int)layer].sealer.GetComponent<Pallet>().y - layers[(int)layer].door.GetComponent<Pallet>().y;
+
+        if(yDistance < 0)
+            yDistance *= -1;
+
+        layers[(int)layer].totalCost += ((xDistance + yDistance) * costPerMeter) * totalDemand;
 
         for(int i = 0; i < layers[(int)layer].placed.Count; i++)
         {
-            float distanceSealer = Vector3.Distance(layers[(int)layer].placed[i].transform.position, layers[(int)layer].sealer.transform.position) * 10;
-            float distanceDoor = Vector3.Distance(layers[(int)layer].sealer.transform.position, layers[(int)layer].door.transform.position) * 10;
+            for(int j = 0; j < product.Length; j++)
+            {
+                if(layers[(int)layer].placed[i].GetComponent<Pallet>().pallet == product[j].colour)
+                {
+                    int xDistanceToSealer = layers[(int)layer].placed[i].GetComponent<Pallet>().x - layers[(int)layer].sealer.GetComponent<Pallet>().x;
 
-            float f = product[(int)layers[(int)layer].placed[i].GetComponent<Pallet>().pallet].demand /
-                product[(int)layers[(int)layer].placed[i].GetComponent<Pallet>().pallet].amount -
-                layers[(int)layer].currentAmount[(int)layers[(int)layer].placed[i].GetComponent<Pallet>().pallet];
+                    if(xDistanceToSealer < 0)
+                        xDistanceToSealer *= -1;
 
-            Debug.Log((int)Mathf.Round(distanceSealer));
-            Debug.Log(distanceSealer);
+                    int yDistanceToSealer = layers[(int)layer].placed[i].GetComponent<Pallet>().y - layers[(int)layer].sealer.GetComponent<Pallet>().y;
 
-            layers[(int)layer].totalCost += ((int)Mathf.Round(distanceSealer) * costPerMeter) * f + ((int)Mathf.Round(distanceDoor) * costPerMeter) * f;
+                    if(yDistanceToSealer < 0)
+                        yDistanceToSealer *= -1;
 
-            layers[(int)layer].grossProfit = layers[(int)layer].revenue - layers[(int)layer].totalCost;
-            layers[(int)layer].grossMargin = (layers[(int)layer].grossProfit / layers[(int)layer].revenue) * 100;
+                    layers[(int)layer].totalCost += ((xDistanceToSealer + yDistanceToSealer) * costPerMeter) * (product[j].demand / product[j].amount);
+                }
+            }
         }
+
+        layers[(int)layer].grossProfit = layers[(int)layer].revenue - layers[(int)layer].totalCost;
+        layers[(int)layer].grossMargin = (layers[(int)layer].grossProfit / layers[(int)layer].revenue) * 100;
 
         TmpVisualize(layers[(int)layer].revenue, layers[(int)layer].totalCost, layers[(int)layer].grossProfit, layers[(int)layer].grossMargin);
     }
@@ -158,7 +173,7 @@ public class GameManager : MonoBehaviour
         }      
     }
 
-    void TmpVisualize(float rev, float cost, float profit, float margin)
+    public void TmpVisualize(float rev, float cost, float profit, float margin)
     {
         tRevenue.text = $"{sRevenue} {rev}";
         tTotalCost.text = $"{sTotalCost} {cost}";
