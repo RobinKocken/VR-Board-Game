@@ -47,7 +47,7 @@ public class Grid : MonoBehaviour
             for(int y = 0; y < yCount; y++)
             {
                 GameObject current = Instantiate(interactable, transform.position, Quaternion.identity, transform);
-                current.transform.localPosition = new Vector3(current.transform.localPosition.x + posDif * x, current.transform.localPosition.y + posDif * y, transform.localPosition.z);
+                current.transform.localPosition = new Vector3(current.transform.localPosition.x + posDif * x, current.transform.localPosition.y + posDif * y, 0);
 
                 current.GetComponent<Placement>().gameManager = gameManager;
                 current.GetComponent<Placement>().x = x;
