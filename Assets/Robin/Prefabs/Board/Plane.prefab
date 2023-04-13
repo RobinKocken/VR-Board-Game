@@ -49,6 +49,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   pallet: {fileID: 0}
+  invalidGrid: {fileID: 0}
+  waitForSecs: 0
   placed: 0
   x: 0
   y: 0

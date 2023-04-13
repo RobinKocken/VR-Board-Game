@@ -54,6 +54,9 @@ public class GameManager : MonoBehaviour
     public string sGrossProfit;
     public string sGrossMargin;
 
+    public ParticleSystem confetti;
+    public AudioSource winSound;
+
     public Layers[] layers;
 
     void Awake()
@@ -64,6 +67,20 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         CurrentAmount();
+    }
+
+    void WinCondition()
+    {
+        for(int i = 0; i < layers[(int)layer].currentAmount.Count - 2; i++)
+        {
+            if(layers[(int)layer].currentAmount[i] > 0)
+            {
+                return;
+            }
+        }
+
+        confetti.Play();
+        winSound.Play();
     }
 
     void Calculate()
@@ -113,7 +130,10 @@ public class GameManager : MonoBehaviour
         layers[(int)layer].grossProfit = layers[(int)layer].revenue - layers[(int)layer].totalCost;
         layers[(int)layer].grossMargin = (layers[(int)layer].grossProfit / layers[(int)layer].revenue) * 100;
 
+        layers[(int)layer].grossMargin = (float)System.Math.Round(layers[(int)layer].grossMargin, 2);
+
         TmpVisualize(layers[(int)layer].revenue, layers[(int)layer].totalCost, layers[(int)layer].grossProfit, layers[(int)layer].grossMargin);
+        WinCondition();
     }
 
     public void CheckIfCalculate(GameObject pallet)
@@ -146,7 +166,17 @@ public class GameManager : MonoBehaviour
 
     public void SelectColour(PalletColour pallet)
     {
+        if(product[(int)colour].amountText != null)
+        {
+            product[(int)colour].amountText.color = Color.black;
+        }
+
         colour = pallet;
+
+        if(product[(int)colour].amountText != null)
+        {
+            product[(int)colour].amountText.color = Color.green;
+        }
 
         if(colour == PalletColour.empty)
         {
@@ -392,7 +422,6 @@ public class GameManager : MonoBehaviour
     {
         for(int i = 0; i < layers.Length; i++)
         {
-
             for(int j = 0; j < product.Length; j++)
             {
                 layers[i].currentAmount.Add(product[j].amount);

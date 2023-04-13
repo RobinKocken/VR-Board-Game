@@ -84,7 +84,6 @@ MonoBehaviour:
   pallet: {fileID: 0}
   invalidGrid: {fileID: 8608152072081445589, guid: c7bc77af45e8c4e4c8697dbfa57ae62f,
     type: 3}
-  invalidSound: {fileID: 0}
   waitForSecs: 0.4
   placed: 0
   x: 0
