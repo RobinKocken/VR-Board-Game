@@ -35,6 +35,7 @@ public class Grid : MonoBehaviour
     void Start()    
     {
         gameManager.InitializeTmp(tRevenue, tTotalCost, tgrossProfit, tgrossMargin, amount);
+        gameManager.TmpVisualize(gameManager.layers[(int)gameManager.layer].revenue, gameManager.layers[(int)gameManager.layer].totalCost, gameManager.layers[(int)gameManager.layer].grossProfit, gameManager.layers[(int)gameManager.layer].grossMargin);
         CreateGrid();
         CreateFloorGrid();
         gameManager.InitializeGrid(grid, floorGrid);

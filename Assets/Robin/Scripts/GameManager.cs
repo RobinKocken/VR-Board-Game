@@ -2,10 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System.Xml.Serialization;
-using System.Diagnostics.Contracts;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -412,7 +408,7 @@ public class GameManager : MonoBehaviour
             {
                 if(gridFloor[i].GetComponent<Placement>().y == y)
                 {
-                    GameObject pallet = Instantiate(product[(int)layer].floorPallet, gridFloor[i].transform.position, Quaternion.identity, gridFloor[i].transform);
+                    GameObject pallet = Instantiate(product[(int)colour].floorPallet, gridFloor[i].transform.position, Quaternion.identity, gridFloor[i].transform);
                     layers[(int)layer].placedFloor.Add(pallet);
                     return;
                 }

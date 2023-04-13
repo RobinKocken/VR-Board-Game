@@ -13,6 +13,8 @@ public class ColourSelect : MonoBehaviour
     public float intervals;
 
     public bool buttonActivate;
+    public AudioSource buttonSelect;
+
     float time;
     Vector3 pos;
 
@@ -53,5 +55,6 @@ public class ColourSelect : MonoBehaviour
     {
         gameManager.SelectColour(pallet);
         buttonActivate = true;
+        buttonSelect.Play();
     }
 }

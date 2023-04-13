@@ -17,6 +17,8 @@ public class LayerSelect : MonoBehaviour
     float time;
     Vector3 pos;
 
+    public AudioSource buttonSelect;
+
     void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
@@ -37,6 +39,7 @@ public class LayerSelect : MonoBehaviour
     {
         gameManager.LayerSelect(layer);
         buttonActivate = true;
+        buttonSelect.Play();
     }
 
     void Button()

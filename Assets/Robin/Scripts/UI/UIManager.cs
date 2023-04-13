@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
@@ -37,7 +38,7 @@ public class UIManager : MonoBehaviour
     public float languageQuestionSpeed;
     bool languageAnimationOut;
     bool languageAnimationIn;
-    bool languageActive;
+    public bool languageActive;
 
     [Header("Shutdown")]
     public Transform yesButton;
@@ -49,13 +50,28 @@ public class UIManager : MonoBehaviour
     public float shutdownQuestionSpeed;
     bool shutdownAnimationOut;
     bool shutdownAnimationIn;
-    bool shutdownActive;
+    public bool shutdownActive;
 
     [Header("Wallpaper")]
-    public Transform[] wallpaper;
+    public Image wallpaper;
+    public Sprite[] wallpapers;
+    public int wallpaperPage;
+
+    public Transform forwardButton;
+    public Transform backwardButton;
+    public Transform wallpaperQuestion;
+    public Transform forwardButtonTargetPos, backwardButtonTarget, wallpaperQuestionTargetPos;
+    Vector3 forwardButtonStartPos, backwardButtonStartPos, wallpaperQuestionStartPos;
+    public float wallpaperSpeed;
+    public float wallpaperQuestionSpeed;
+    bool wallpaperAnimationOut;
+    bool wallpaperAnimationIn;
+    public bool wallpaperActive;
 
     void Start()
     {
+        wallpaperPage = 0;
+
         shutdownStartPos = shutdownButton.localPosition;
         languageStartPos = languageButton.localPosition;
         wallpaperStartPos = wallpaperButton.localPosition;
@@ -70,6 +86,10 @@ public class UIManager : MonoBehaviour
 
         borderStartPos = border.localPosition;
         creditsStartPos = credits.localPosition;
+
+        forwardButtonStartPos = forwardButton.localPosition;
+        backwardButtonStartPos = backwardButton.localPosition;
+        wallpaperQuestionStartPos = wallpaperQuestion.localPosition;
     }
 
     void Update()
@@ -109,6 +129,15 @@ public class UIManager : MonoBehaviour
         {
             CreditsAnimationClose();
         }
+
+        if(wallpaperAnimationOut)
+        {
+            WallpaperAnimationOpen();
+        }
+        else if(wallpaperAnimationIn)
+        {
+            WallpaperAnimationClose();
+        }
     }
 
     public void HomeButton()
@@ -129,15 +158,21 @@ public class UIManager : MonoBehaviour
             ShutdownButton();
         }
 
+        if(wallpaperActive)
+        {
+            WallpaperButton();
+        }
+
         if(settingsActive)
         {
             SettingsButton();
         }
+
     }
 
     public void SettingsButton()
     {
-        if(!languageActive && !shutdownActive && !creditsActive)
+        if(!languageActive && !shutdownActive && !creditsActive && !wallpaperActive)
         {
             if(!settingsActive)
             {
@@ -152,13 +187,18 @@ public class UIManager : MonoBehaviour
                 settingsActive = false;
             }
         }
+        else
+        {
+            HomeButton();
+            SettingsButton();
+        }
     }
 
     void SettingsAnimationOpen()
     {
         shutdownButton.localPosition = Vector2.MoveTowards(shutdownButton.localPosition, shutdownTargetPos.localPosition, settingsSpeed * Time.deltaTime);
         languageButton.localPosition = Vector2.MoveTowards(languageButton.localPosition, languageTargetPos.localPosition, settingsSpeed * Time.deltaTime);
-        wallpaperButton.localPosition = Vector2.MoveTowards(wallpaperButton.localPosition, wallpaperButton.localPosition, settingsSpeed * Time.deltaTime);
+        wallpaperButton.localPosition = Vector2.MoveTowards(wallpaperButton.localPosition, wallpaperTargetPos.localPosition, settingsSpeed * Time.deltaTime);
         
 
         if(shutdownButton.position == shutdownTargetPos.position && languageButton.position == languageTargetPos.position && wallpaperButton.position == wallpaperTargetPos.position)
@@ -171,8 +211,9 @@ public class UIManager : MonoBehaviour
     {
         shutdownButton.localPosition = Vector2.MoveTowards(shutdownButton.localPosition, shutdownStartPos, settingsSpeed * Time.deltaTime);
         languageButton.localPosition = Vector2.MoveTowards(languageButton.localPosition, languageStartPos, settingsSpeed * Time.deltaTime);        
+        wallpaperButton.localPosition = Vector2.MoveTowards(wallpaperButton.localPosition, wallpaperStartPos, settingsSpeed * Time.deltaTime);        
 
-        if(shutdownButton.position == shutdownStartPos && languageButton.position == languageStartPos && wallpaperButton.position == wallpaperTargetPos.position)
+        if(shutdownButton.position == shutdownStartPos && languageButton.position == languageStartPos && wallpaperButton.position == wallpaperStartPos)
         {
             settingsAnimationIn = false;
         }
@@ -194,6 +235,11 @@ public class UIManager : MonoBehaviour
                 creditsAnimationIn = true;
                 creditsActive = false;
             }
+        }
+        else if(settingsActive)
+        {
+            HomeButton();
+            InfoButton();
         }
     }
 
@@ -221,7 +267,7 @@ public class UIManager : MonoBehaviour
 
     public void LanguageButton()
     {
-        if(!shutdownActive)
+        if(!shutdownActive && !wallpaperActive)
         {
             if(!languageActive)
             {
@@ -239,7 +285,12 @@ public class UIManager : MonoBehaviour
         else if(shutdownActive)
         {
             ShutdownButton();
-            LanguageButton();            
+            LanguageButton();
+        }
+        else if(wallpaperActive)
+        {
+            WallpaperButton();
+            LanguageButton();
         }
 
     }
@@ -270,7 +321,7 @@ public class UIManager : MonoBehaviour
 
     public void ShutdownButton()
     {
-        if(!languageActive)
+        if(!languageActive && !wallpaperActive)
         {
             if(!shutdownActive)
             {
@@ -288,6 +339,11 @@ public class UIManager : MonoBehaviour
         else if(languageActive)
         {
             LanguageButton();
+            ShutdownButton();
+        }
+        else if(wallpaperActive)
+        {
+            WallpaperButton();
             ShutdownButton();
         }
     }
@@ -328,21 +384,71 @@ public class UIManager : MonoBehaviour
 
     public void WallpaperButton()
     {
-
+        if(!languageActive && !shutdownActive)
+        {
+            if(!wallpaperActive)
+            {
+                wallpaperAnimationOut = true;
+                wallpaperAnimationIn = false;
+                wallpaperActive = true;
+            }
+            else if(wallpaperActive)
+            {
+                wallpaperAnimationOut = false;
+                wallpaperAnimationIn = true;
+                wallpaperActive = false;
+            }
+        }
+        else if(languageActive)
+        {
+            LanguageButton();
+            WallpaperButton();
+        }
+        else if(shutdownActive)
+        {
+            ShutdownButton();
+            WallpaperButton();
+        }
     }
 
     public void WallpaperSelect(int number)
     {
+        wallpaperPage += number;
 
+        if(wallpaperPage < 0)
+        {
+            wallpaperPage = 0;
+        }
+        else if(wallpaperPage > wallpapers.Length - 1)
+        {
+            wallpaperPage = wallpapers.Length - 1;
+        }
+
+        wallpaper.sprite = wallpapers[wallpaperPage];
     }
 
     void WallpaperAnimationOpen()
     {
+        forwardButton.localPosition = Vector2.MoveTowards(forwardButton.localPosition, forwardButtonTargetPos.localPosition, wallpaperSpeed * Time.deltaTime);
+        backwardButton.localPosition = Vector2.MoveTowards(backwardButton.localPosition, backwardButtonTarget.localPosition, shutdownSpeed * Time.deltaTime);
+        wallpaperQuestion.localPosition = Vector2.MoveTowards(wallpaperQuestion.localPosition, wallpaperQuestionTargetPos.localPosition, wallpaperQuestionSpeed * Time.deltaTime);
 
+        if(forwardButton.position == forwardButtonTargetPos.position && backwardButton.position == backwardButtonTarget.position && wallpaperQuestion.position == wallpaperQuestionTargetPos.position)
+        {
+            wallpaperAnimationOut = false;
+        }
     }
 
     void WallpaperAnimationClose()
     {
+        forwardButton.localPosition = Vector2.MoveTowards(forwardButton.localPosition, forwardButtonStartPos, wallpaperSpeed * Time.deltaTime);
+        backwardButton.localPosition = Vector2.MoveTowards(backwardButton.localPosition, backwardButtonStartPos, wallpaperSpeed * Time.deltaTime);
+        wallpaperQuestion.localPosition = Vector2.MoveTowards(wallpaperQuestion.localPosition, wallpaperQuestionStartPos, wallpaperQuestionSpeed * Time.deltaTime);
 
+
+        if(forwardButton.localPosition == forwardButtonStartPos && backwardButton.localPosition == backwardButtonStartPos && wallpaperQuestion.position == wallpaperQuestionStartPos)
+        {
+            wallpaperAnimationIn = false;
+        }
     }
 }

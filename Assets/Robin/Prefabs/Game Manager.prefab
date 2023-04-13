@@ -123,7 +123,7 @@ MonoBehaviour:
   - colour: 9
     pallet: {fileID: 3827024334480409342, guid: 7c9e486da5088e94aafd933b24fd116b,
       type: 3}
-    floorPallet: {fileID: 3720276802619845469, guid: 3959282c80fa0e449ba044d52ce1d75b,
+    floorPallet: {fileID: 1148408077884138221, guid: 528a77d9ab3f14f4eafef47ed0825ba0,
       type: 3}
     amount: 1
     demand: 0
@@ -131,7 +131,7 @@ MonoBehaviour:
   - colour: 10
     pallet: {fileID: 3827024334480409342, guid: ec5fbaf736122b2438fdfdf7c2142ef9,
       type: 3}
-    floorPallet: {fileID: 3827024334480409342, guid: ec5fbaf736122b2438fdfdf7c2142ef9,
+    floorPallet: {fileID: 3395663557239365610, guid: 22ba64f9269770541ba50312ad0407fd,
       type: 3}
     amount: 1
     demand: 0

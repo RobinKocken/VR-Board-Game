@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Localization : MonoBehaviour
 {
@@ -19,7 +18,7 @@ public class Localization : MonoBehaviour
     public string nlGrossProfit;
     public string nlGrossMargin;
 
-    void Start()
+    private void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
@@ -27,8 +26,11 @@ public class Localization : MonoBehaviour
         gameManager.sTotalCost = engTotalCost;
         gameManager.sGrossProfit = engGrossProfit;
         gameManager.sGrossMargin = engGrossMargin;
+    }
 
-        gameManager.TmpVisualize(gameManager.layers[(int)gameManager.layer].revenue, 0, 0, 0);
+    void Start()
+    {
+
     }
 
     public void Dutch()

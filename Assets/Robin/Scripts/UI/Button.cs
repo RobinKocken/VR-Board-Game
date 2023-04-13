@@ -15,11 +15,6 @@ public class Button : MonoBehaviour
         local = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Localization>();
     }
 
-    public void Tutorial()
-    {
-
-    }
-
     public void Setting()
     {
         computer.SetActive(false);

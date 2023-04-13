@@ -6,15 +6,24 @@ public class Placement : MonoBehaviour
 {
     public GameManager gameManager;
     public GameObject pallet;
+    public GameObject invalidGrid;
+    public float waitForSecs;
     public bool placed;
     public int x, y;
+
+    void Start()
+    {
+        if(invalidGrid != null)
+        {
+            invalidGrid = Instantiate(invalidGrid, transform.position, transform.rotation);
+            invalidGrid.SetActive(false);
+        }
+    }
 
     public void Place()
     {
         if(!placed)
             placed = gameManager.StartValidation(false, x, y);
-
-        //Debug.Log(placed);
 
         if(placed && gameManager.selected != null && pallet == null)
         {
@@ -36,5 +45,20 @@ public class Placement : MonoBehaviour
             gameManager.DeleteFloor(x, y);
             placed = false;
         }
+        else if(!placed)
+        {
+            
+            gameObject.SetActive(false);
+            invalidGrid.SetActive(true);
+            invalidGrid.GetComponent<AudioSource>().Play();
+
+            Invoke("Wait", waitForSecs);
+        }
+    }
+
+    void Wait()
+    {
+        invalidGrid.SetActive(false);
+        gameObject.SetActive(true);
     }
 }

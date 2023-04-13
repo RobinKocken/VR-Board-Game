@@ -7,6 +7,8 @@ public class Door : MonoBehaviour
     Transform player;
     public Transform telPos;
 
+    public AudioSource doorSound;
+
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -15,6 +17,7 @@ public class Door : MonoBehaviour
     public void Teleport()
     {
         player.position = telPos.position;
+        doorSound.Play();
     }
 
 }
