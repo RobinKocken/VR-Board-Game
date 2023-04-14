@@ -18,6 +18,10 @@ public class Localization : MonoBehaviour
     public string nlGrossProfit;
     public string nlGrossMargin;
 
+    public Transform flagPos;
+    public GameObject englishFlag;
+    public GameObject dutchFlag;
+
     private void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
@@ -30,7 +34,9 @@ public class Localization : MonoBehaviour
 
     void Start()
     {
-
+        englishFlag = Instantiate(englishFlag, flagPos.position, flagPos.rotation);
+        dutchFlag = Instantiate(dutchFlag, flagPos.position, flagPos.rotation);
+        dutchFlag.SetActive(false);
     }
 
     public void Dutch()
@@ -46,6 +52,9 @@ public class Localization : MonoBehaviour
         gameManager.sGrossProfit = nlGrossProfit;
         gameManager.sGrossMargin = nlGrossMargin;
 
+        englishFlag.SetActive(false);
+        dutchFlag.SetActive(true);
+
         gameManager.TmpLanguageUpdate();
     }
     public void English()
@@ -60,6 +69,9 @@ public class Localization : MonoBehaviour
         gameManager.sTotalCost = engTotalCost;
         gameManager.sGrossProfit =engGrossProfit;
         gameManager.sGrossMargin = engGrossMargin;
+
+        dutchFlag.SetActive(false);
+        englishFlag.SetActive(true);
 
         gameManager.TmpLanguageUpdate();
     }
