@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -343,6 +345,8 @@ public class GameManager : MonoBehaviour
         }
 
         ResetCurrentAmount();
+        TmpVisualize(layers[(int)layer].revenue, layers[(int)layer].totalCost, layers[(int)layer].grossProfit, layers[(int)layer].grossMargin);
+
     }
 
     public void LayerSelect(LayerNumber layerSelected)
@@ -360,6 +364,7 @@ public class GameManager : MonoBehaviour
         for(int i = 0; i < grid.Count; i++)
         {
             layers[(int)layer].gridBool[i] = grid[i].GetComponent<Placement>().placed;
+            grid[i].GetComponent<Placement>().pallet = null;
         }
 
         if(layers[(int)layer].sealer != null)   
@@ -383,6 +388,17 @@ public class GameManager : MonoBehaviour
         for(int i = 0; i < grid.Count; i++)
         {
             grid[i].GetComponent<Placement>().placed = layers[(int)layer].gridBool[i];
+
+            for(int j = 0; j < layers[(int)layer].placed.Count; j++)
+            {
+                if(layers[(int)layer].placed[j].GetComponent<Pallet>().x == grid[i].GetComponent<Placement>().x)
+                {
+                    if(layers[(int)layer].placed[j].GetComponent<Pallet>().y == grid[i].GetComponent<Placement>().y)
+                    {
+                        grid[i].GetComponent<Placement>().pallet = layers[(int)layer].placed[j];
+                    }
+                }
+            }
         }
 
         if(layers[(int)layer].sealer != null)
@@ -447,6 +463,8 @@ public class GameManager : MonoBehaviour
 
     public bool StartValidation(bool isValid, int x, int y)
     {
+        //Debug.Log(x + "-" + y);
+
         for(int i = 0; i < layers[(int)layer].placed.Count; i++)
         {
             isValid = CheckForPos(false, isValid, layers[(int)layer].placed[i].GetComponent<Pallet>().x, layers[(int)layer].placed[i].GetComponent<Pallet>().y, x, y);

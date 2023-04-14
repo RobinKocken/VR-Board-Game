@@ -10,6 +10,7 @@ public class Placement : MonoBehaviour
     public float waitForSecs;
     public bool placed;
     public int x, y;
+    bool invalidActive;
 
     void Start()
     {
@@ -45,10 +46,10 @@ public class Placement : MonoBehaviour
             gameManager.DeleteFloor(x, y);
             placed = false;
         }
-        else if(!placed)
+        else if(!placed && !invalidActive)
         {
-            
-            gameObject.SetActive(false);
+            invalidActive = true;
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
             invalidGrid.SetActive(true);
             invalidGrid.GetComponent<AudioSource>().Play();
 
@@ -59,6 +60,7 @@ public class Placement : MonoBehaviour
     void Wait()
     {
         invalidGrid.SetActive(false);
-        gameObject.SetActive(true);
+        gameObject.GetComponent<MeshRenderer>().enabled = true;
+        invalidActive = false;
     }
 }
